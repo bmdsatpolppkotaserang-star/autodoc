@@ -12,8 +12,14 @@
   <body>
     <h3>Form Otomasi BAST Satpol PP</h3>
     <form id="bastForm" onsubmit="handleFormSubmit(event)">
-      <input type="text" name="nomor_surat" placeholder="Nomor Surat" required>
-      <input type="text" name="hari_tanggal" placeholder="Hari & Tanggal" required>
+      
+      <!-- PILIH SURAT (DARI TAB SURAT) -->
+      <label>Pilih Klasifikasi Surat:</label>
+      <select id="select_surat" onchange="isiDataSurat(this)">
+        <option value="">-- Pilih Klasifikasi Surat --</option>
+      </select>
+      <input type="text" name="nomor_surat" id="nomor_surat" placeholder="Nomor Surat" required>
+      <input type="text" name="hari_tanggal" id="hari_tanggal" placeholder="Hari & Tanggal" required>
       <hr>
 
       <!-- PIHAK PERTAMA -->
@@ -71,9 +77,15 @@
       <input type="text" name="nip_p2_ttd" id="nip_p2_ttd" placeholder="NIP TTD Pihak 2">
       <hr>
 
-      <input type="text" name="nama_mengetahui" placeholder="Nama Mengetahui">
-      <input type="text" name="pangkat_mengetahui" placeholder="Pangkat Mengetahui">
-      <input type="text" name="nip_mengetahui" placeholder="NIP Mengetahui">
+      <!-- MENGETAHUI -->
+      <label>Pilih Yang Mengetahui dari Database:</label>
+      <select id="select_mengetahui" onchange="isiMengetahui(this)">
+        <option value="">-- Pilih Pegawai --</option>
+      </select>
+      <input type="text" name="nama_mengetahui" id="nama_mengetahui" placeholder="Nama Mengetahui">
+      <input type="text" name="pangkat_mengetahui" id="pangkat_mengetahui" placeholder="Pangkat Mengetahui">
+      <input type="text" name="nip_mengetahui" id="nip_mengetahui" placeholder="NIP Mengetahui">
+      <hr>
       
       <button type="submit">Buat BAST</button>
     </form>
@@ -88,14 +100,27 @@
             if(res.status === 'success') {
               window.dataPegawai = res.pegawai;
               window.dataAset = res.aset;
+              window.dataSurat = res.surat;
 
               let selP1 = document.getElementById('select_p1');
               let selP2 = document.getElementById('select_p2');
               let selTtdP1 = document.getElementById('select_ttd_p1');
               let selTtdP2 = document.getElementById('select_ttd_p2');
+              let selMengetahui = document.getElementById('select_mengetahui');
               let selAset = document.getElementById('select_aset');
+              let selSurat = document.getElementById('select_surat');
 
-              // Masukkan opsi ke dropdown Pegawai & TTD
+              // Masukkan opsi ke dropdown Surat
+              if(res.surat) {
+                res.surat.forEach((s, index) => {
+                  let opt = document.createElement('option');
+                  opt.value = index;
+                  opt.innerHTML = s[0]; // Kolom A: Klasifikasi Surat
+                  selSurat.appendChild(opt);
+                });
+              }
+
+              // Masukkan opsi ke dropdown Pegawai, TTD, & Mengetahui
               res.pegawai.forEach((p, index) => {
                 let opt1 = document.createElement('option');
                 opt1.value = index;
@@ -116,6 +141,11 @@
                 optTtd2.value = index;
                 optTtd2.innerHTML = p[0];
                 selTtdP2.appendChild(optTtd2);
+
+                let optMengetahui = document.createElement('option');
+                optMengetahui.value = index;
+                optMengetahui.innerHTML = p[0];
+                selMengetahui.appendChild(optMengetahui);
               });
 
               // Masukkan opsi ke dropdown Aset
@@ -129,6 +159,14 @@
           })
           .catch(err => console.error('Gagal memuat database:', err));
       };
+
+      function isiDataSurat(select) {
+        let idx = select.value;
+        if(idx === "") return;
+        let s = window.dataSurat[idx];
+        document.getElementById('nomor_surat').value = s[1] || ''; // Kolom B: Nomor Surat
+        document.getElementById('hari_tanggal').value = s[2] || ''; // Kolom C: Hari & Tanggal
+      }
 
       function isiPihakPertama(select) {
         let idx = select.value;
@@ -175,6 +213,15 @@
         document.getElementById('nama_p2_ttd').value = p[0] || '';
         document.getElementById('nip_p2_ttd').value = p[1] || '';
         document.getElementById('pangkat_p2_ttd').value = p[2] || '';
+      }
+
+      function isiMengetahui(select) {
+        let idx = select.value;
+        if(idx === "") return;
+        let p = window.dataPegawai[idx];
+        document.getElementById('nama_mengetahui').value = p[0] || '';
+        document.getElementById('nip_mengetahui').value = p[1] || '';
+        document.getElementById('pangkat_mengetahui').value = p[2] || '';
       }
 
       async function handleFormSubmit(event) {
