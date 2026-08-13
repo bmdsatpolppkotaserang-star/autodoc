@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body { font-family: Arial; padding: 20px; max-width: 600px; margin: auto; }
+      input, select { width: 100%; padding: 8px; margin-bottom: 10px; box-sizing: border-box; }
+      button { background: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; width: 100%; font-size: 16px; }
+      label { font-size: 12px; color: #666; font-weight: bold; }
+    </style>
+  </head>
+  <body>
+    <h3>Form Otomasi BAST Satpol PP</h3>
+    <form id="bastForm" onsubmit="handleFormSubmit(event)">
+      <input type="text" name="nomor_surat" placeholder="Nomor Surat" required>
+      <input type="text" name="hari_tanggal" placeholder="Hari & Tanggal" required>
+      <hr>
+
+      <!-- PIHAK PERTAMA (Auto-fill dari Database) -->
+      <label>Pilih Pihak Pertama dari Database:</label>
+      <select id="select_p1" onchange="isiPihakPertama(this)">
+        <option value="">-- Pilih Pegawai --</option>
+      </select>
+      <input type="text" id="nama_p1" name="nama_p1" placeholder="Nama Pihak Pertama">
+      <input type="text" id="nip_p1" name="nip_p1" placeholder="NIP Pihak Pertama">
+      <input type="text" id="pangkat_p1" name="pangkat_p1" placeholder="Pangkat Pihak Pertama">
+      <input type="text" id="jabatan_p1" name="jabatan_p1" placeholder="Jabatan Pihak Pertama">
+      <hr>
+
+      <!-- PIHAK KEDUA (Auto-fill dari Database) -->
+      <label>Pilih Pihak Kedua dari Database:</label>
+      <select id="select_p2" onchange="isiPihakKedua(this)">
+        <option value="">-- Pilih Pegawai --</option>
+      </select>
+      <input type="text" id="nama_p2" name="nama_p2" placeholder="Nama Pihak Kedua">
+      <input type="text" id="nip_p2" name="nip_p2" placeholder="NIP Pihak Kedua">
+      <input type="text" id="pangkat_p2" name="pangkat_p2" placeholder="Pangkat Pihak Kedua">
+      <input type="text" id="jabatan_p2" name="jabatan_p2" placeholder="Jabatan Pihak Kedua">
+      <hr>
+
+      <!-- DETAIL BARANG (Auto-fill dari Database Aset) -->
+      <label>Pilih Barang dari Database Aset:</label>
+      <select id="select_aset" onchange="isiAset(this)">
+        <option value="">-- Pilih Barang --</option>
+      </select>
+      <input type="text" id="nama_barang" name="nama_barang" placeholder="Nama Barang">
+      <input type="text" id="merk_type" name="merk_type" placeholder="Merk/Type">
+      <input type="text" name="no_seri" placeholder="No. Sertifikat/Mesin/Polisi">
+      <input type="text" id="tahun_perolehan" name="tahun_perolehan" placeholder="Tahun Perolehan">
+      <input type="text" name="jumlah" placeholder="Jumlah">
+      <input type="text" name="keterangan" placeholder="Keterangan">
+      <hr>
+
+      <input type="text" name="nama_p1_ttd" placeholder="Nama TTD Pihak 1">
+      <input type="text" name="pangkat_p1_ttd" placeholder="Pangkat TTD Pihak 1">
+      <input type="text" name="nip_p1_ttd" placeholder="NIP TTD Pihak 1">
+      <hr>
+      <input type="text" name="nama_p2_ttd" placeholder="Nama TTD Pihak 2">
+      <input type="text" name="pangkat_p2_ttd" placeholder="Pangkat TTD Pihak 2">
+      <input type="text" name="nip_p2_ttd" placeholder="NIP TTD Pihak 2">
+      <hr>
+      <input type="text" name="nama_mengetahui" placeholder="Nama Mengetahui">
+      <input type="text" name="pangkat_mengetahui" placeholder="Pangkat Mengetahui">
+      <input type="text" name="nip_mengetahui" placeholder="NIP Mengetahui">
+      
+      <button type="submit">Buat BAST</button>
+    </form>
+
+    <script>
+      const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzh9Wo6pnl_wjmT26mzJzO1C2j3ZbsIYsCtHmpIipsey8q--Rn-GjTl-9aQvxe6bDDm/exec';
+
+      // Ambil data database saat halaman pertama kali dibuka
+      window.onload = function() {
+        fetch(WEB_APP_URL + '?action=getData')
+          .then(res => res.json())
+          .then(res => {
+            if(res.status === 'success') {
+              window.dataPegawai = res.pegawai;
+              window.dataAset = res.aset;
+
+              let selP1 = document.getElementById('select_p1');
+              let selP2 = document.getElementById('select_p2');
+              let selAset = document.getElementById('select_aset');
+
+              // Masukkan opsi ke dropdown Pegawai
+              res.pegawai.forEach((p, index) => {
+                let opt1 = document.createElement('option');
+                opt1.value = index;
+                opt1.innerHTML = p[0]; // Kolom Nama
+                selP1.appendChild(opt1);
+
+                let opt2 = document.createElement('option');
+                opt2.value = index;
+                opt2.innerHTML = p[0]; // Kolom Nama
+                selP2.appendChild(opt2);
+              });
+
+              // Masukkan opsi ke dropdown Aset
+              res.aset.forEach((a, index) => {
+                let opt = document.createElement('option');
+                opt.value = index;
+                opt.innerHTML = a[0]; // Kolom Nama Barang
+                selAset.appendChild(opt);
+              });
+            }
+          })
+          .catch(err => console.error('Gagal memuat database:', err));
+      };
+
+      // Fungsi Auto-fill Pihak 1
+      function isiPihakPertama(select) {
+        let idx = select.value;
+        if(idx === "") return;
+        let p = window.dataPegawai[idx];
+        document.getElementById('nama_p1').value = p[0] || '';
+        document.getElementById('nip_p1').value = p[1] || '';
+        document.getElementById('pangkat_p1').value = p[2] || '';
+        document.getElementById('jabatan_p1').value = p[3] || '';
+      }
+
+      // Fungsi Auto-fill Pihak 2
+      function isiPihakKedua(select) {
+        let idx = select.value;
+        if(idx === "") return;
+        let p = window.dataPegawai[idx];
+        document.getElementById('nama_p2').value = p[0] || '';
+        document.getElementById('nip_p2').value = p[1] || '';
+        document.getElementById('pangkat_p2').value = p[2] || '';
+        document.getElementById('jabatan_p2').value = p[3] || '';
+      }
+
+      // Fungsi Auto-fill Aset
+      function isiAset(select) {
+        let idx = select.value;
+        if(idx === "") return;
+        let a = window.dataAset[idx];
+        document.getElementById('nama_barang').value = a[0] || '';
+        document.getElementById('merk_type').value = a[1] || '';
+        document.getElementById('tahun_perolehan').value = a[2] || '';
+      }
+
+      async function handleFormSubmit(event) {
+        event.preventDefault();
+        alert('Sedang memproses, mohon tunggu...');
+        
+        const form = document.getElementById('bastForm');
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+          const response = await fetch(WEB_APP_URL, {
+            method: 'POST',
+            body: JSON.stringify(data)
+          });
+          
+          const result = await response.json();
+          if(result.status === 'success') {
+            alert('Berhasil! Link dokumen: ' + result.url);
+            window.open(result.url, '_blank'); // Otomatis buka dokumen baru di tab lain
+          } else {
+            alert('Gagal: ' + result.message);
+          }
+        } catch (error) {
+          alert('Terjadi kesalahan koneksi: ' + error);
+        }
+      }
+    </script>
+  </body>
+</html>
