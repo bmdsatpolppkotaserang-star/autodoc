@@ -16,7 +16,7 @@
       <input type="text" name="hari_tanggal" placeholder="Hari & Tanggal" required>
       <hr>
 
-      <!-- PIHAK PERTAMA (Auto-fill dari Database) -->
+      <!-- PIHAK PERTAMA -->
       <label>Pilih Pihak Pertama dari Database:</label>
       <select id="select_p1" onchange="isiPihakPertama(this)">
         <option value="">-- Pilih Pegawai --</option>
@@ -27,7 +27,7 @@
       <input type="text" id="jabatan_p1" name="jabatan_p1" placeholder="Jabatan Pihak Pertama">
       <hr>
 
-      <!-- PIHAK KEDUA (Auto-fill dari Database) -->
+      <!-- PIHAK KEDUA -->
       <label>Pilih Pihak Kedua dari Database:</label>
       <select id="select_p2" onchange="isiPihakKedua(this)">
         <option value="">-- Pilih Pegawai --</option>
@@ -38,7 +38,7 @@
       <input type="text" id="jabatan_p2" name="jabatan_p2" placeholder="Jabatan Pihak Kedua">
       <hr>
 
-      <!-- DETAIL BARANG (Auto-fill dari Database Aset) -->
+      <!-- DETAIL BARANG -->
       <label>Pilih Barang dari Database Aset:</label>
       <select id="select_aset" onchange="isiAset(this)">
         <option value="">-- Pilih Barang --</option>
@@ -51,14 +51,26 @@
       <input type="text" name="keterangan" placeholder="Keterangan">
       <hr>
 
-      <input type="text" name="nama_p1_ttd" placeholder="Nama TTD Pihak 1">
-      <input type="text" name="pangkat_p1_ttd" placeholder="Pangkat TTD Pihak 1">
-      <input type="text" name="nip_p1_ttd" placeholder="NIP TTD Pihak 1">
+      <!-- TTD PIHAK 1 -->
+      <label>Pilih TTD Pihak 1 dari Database:</label>
+      <select id="select_ttd_p1" onchange="isiTtdPihak1(this)">
+        <option value="">-- Pilih Penanda Tangan --</option>
+      </select>
+      <input type="text" name="nama_p1_ttd" id="nama_p1_ttd" placeholder="Nama TTD Pihak 1">
+      <input type="text" name="pangkat_p1_ttd" id="pangkat_p1_ttd" placeholder="Pangkat TTD Pihak 1">
+      <input type="text" name="nip_p1_ttd" id="nip_p1_ttd" placeholder="NIP TTD Pihak 1">
       <hr>
-      <input type="text" name="nama_p2_ttd" placeholder="Nama TTD Pihak 2">
-      <input type="text" name="pangkat_p2_ttd" placeholder="Pangkat TTD Pihak 2">
-      <input type="text" name="nip_p2_ttd" placeholder="NIP TTD Pihak 2">
+
+      <!-- TTD PIHAK 2 -->
+      <label>Pilih TTD Pihak 2 dari Database:</label>
+      <select id="select_ttd_p2" onchange="isiTtdPihak2(this)">
+        <option value="">-- Pilih Penanda Tangan --</option>
+      </select>
+      <input type="text" name="nama_p2_ttd" id="nama_p2_ttd" placeholder="Nama TTD Pihak 2">
+      <input type="text" name="pangkat_p2_ttd" id="pangkat_p2_ttd" placeholder="Pangkat TTD Pihak 2">
+      <input type="text" name="nip_p2_ttd" id="nip_p2_ttd" placeholder="NIP TTD Pihak 2">
       <hr>
+
       <input type="text" name="nama_mengetahui" placeholder="Nama Mengetahui">
       <input type="text" name="pangkat_mengetahui" placeholder="Pangkat Mengetahui">
       <input type="text" name="nip_mengetahui" placeholder="NIP Mengetahui">
@@ -69,7 +81,6 @@
     <script>
       const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzf3jtNIVf_IchM1NdKQqoceLqrk3pl-gS4B2QzQXerIxJ9OLYLZ2l3Js5tkIO0kf-g/exec';
 
-      // Ambil data database saat halaman pertama kali dibuka
       window.onload = function() {
         fetch(WEB_APP_URL + '?action=getData')
           .then(res => res.json())
@@ -80,26 +91,38 @@
 
               let selP1 = document.getElementById('select_p1');
               let selP2 = document.getElementById('select_p2');
+              let selTtdP1 = document.getElementById('select_ttd_p1');
+              let selTtdP2 = document.getElementById('select_ttd_p2');
               let selAset = document.getElementById('select_aset');
 
-              // Masukkan opsi ke dropdown Pegawai
+              // Masukkan opsi ke dropdown Pegawai & TTD
               res.pegawai.forEach((p, index) => {
                 let opt1 = document.createElement('option');
                 opt1.value = index;
-                opt1.innerHTML = p[0]; // Kolom Nama
+                opt1.innerHTML = p[0];
                 selP1.appendChild(opt1);
 
                 let opt2 = document.createElement('option');
                 opt2.value = index;
-                opt2.innerHTML = p[0]; // Kolom Nama
+                opt2.innerHTML = p[0];
                 selP2.appendChild(opt2);
+
+                let optTtd1 = document.createElement('option');
+                optTtd1.value = index;
+                optTtd1.innerHTML = p[0];
+                selTtdP1.appendChild(optTtd1);
+
+                let optTtd2 = document.createElement('option');
+                optTtd2.value = index;
+                optTtd2.innerHTML = p[0];
+                selTtdP2.appendChild(optTtd2);
               });
 
               // Masukkan opsi ke dropdown Aset
               res.aset.forEach((a, index) => {
                 let opt = document.createElement('option');
                 opt.value = index;
-                opt.innerHTML = a[0]; // Kolom Nama Barang
+                opt.innerHTML = a[0];
                 selAset.appendChild(opt);
               });
             }
@@ -107,7 +130,6 @@
           .catch(err => console.error('Gagal memuat database:', err));
       };
 
-      // Fungsi Auto-fill Pihak 1
       function isiPihakPertama(select) {
         let idx = select.value;
         if(idx === "") return;
@@ -118,7 +140,6 @@
         document.getElementById('jabatan_p1').value = p[3] || '';
       }
 
-      // Fungsi Auto-fill Pihak 2
       function isiPihakKedua(select) {
         let idx = select.value;
         if(idx === "") return;
@@ -129,7 +150,6 @@
         document.getElementById('jabatan_p2').value = p[3] || '';
       }
 
-      // Fungsi Auto-fill Aset
       function isiAset(select) {
         let idx = select.value;
         if(idx === "") return;
@@ -137,6 +157,24 @@
         document.getElementById('nama_barang').value = a[0] || '';
         document.getElementById('merk_type').value = a[1] || '';
         document.getElementById('tahun_perolehan').value = a[2] || '';
+      }
+
+      function isiTtdPihak1(select) {
+        let idx = select.value;
+        if(idx === "") return;
+        let p = window.dataPegawai[idx];
+        document.getElementById('nama_p1_ttd').value = p[0] || '';
+        document.getElementById('nip_p1_ttd').value = p[1] || '';
+        document.getElementById('pangkat_p1_ttd').value = p[2] || '';
+      }
+
+      function isiTtdPihak2(select) {
+        let idx = select.value;
+        if(idx === "") return;
+        let p = window.dataPegawai[idx];
+        document.getElementById('nama_p2_ttd').value = p[0] || '';
+        document.getElementById('nip_p2_ttd').value = p[1] || '';
+        document.getElementById('pangkat_p2_ttd').value = p[2] || '';
       }
 
       async function handleFormSubmit(event) {
@@ -156,7 +194,7 @@
           const result = await response.json();
           if(result.status === 'success') {
             alert('Berhasil! Link dokumen: ' + result.url);
-            window.open(result.url, '_blank'); // Otomatis buka dokumen baru di tab lain
+            window.open(result.url, '_blank');
           } else {
             alert('Gagal: ' + result.message);
           }
