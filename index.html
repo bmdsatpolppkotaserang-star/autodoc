@@ -3,26 +3,30 @@
   <head>
     <base target="_top">
     <style>
-      body { font-family: Arial; padding: 20px; max-width: 600px; margin: auto; }
+      body { font-family: Arial; padding: 20px; max-width: 700px; margin: auto; }
       input, select { width: 100%; padding: 8px; margin-bottom: 5px; box-sizing: border-box; }
-      button { background: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; width: 100%; font-size: 16px; margin-top: 10px; }
+      button { background: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; font-size: 16px; margin-top: 5px; }
+      .btn-danger { background: #dc3545; padding: 5px 10px; font-size: 12px; margin-bottom: 10px; width: auto; }
+      .btn-success { background: #28a745; width: 100%; margin-top: 15px; }
       label { font-size: 12px; color: #666; font-weight: bold; }
-      .autocomplete-container { position: relative; margin-bottom: 10px; }
+      .autocomplete-container { position: relative; margin-bottom: 5px; }
       .suggestions-list {
         position: absolute; border: 1px solid #d4d4d4; border-bottom: none; border-top: none;
         z-index: 99; top: 100%; left: 0; right: 0; max-height: 150px; overflow-y: auto; background-color: #fff;
       }
-      .suggestions-list div { padding: 10px; cursor: pointer; border-bottom: 1px solid #d4d4d4; font-size: 14px; }
+      .suggestions-list div { padding: 8px; cursor: pointer; border-bottom: 1px solid #d4d4d4; font-size: 13px; }
       .suggestions-list div:hover { background-color: #e9e9e9; }
       .loading-box { font-style: italic; color: #007bff; margin-bottom: 15px; font-weight: bold; }
+      .item-row { background: #f9f9f9; padding: 15px; border: 1px solid #ddd; margin-bottom: 10px; border-radius: 5px; }
     </style>
   </head>
   <body>
-    <h3>Form Otomasi BAST Satpol PP</h3>
+    <h3>Form Otomasi BAST Satpol PP (Multi-Aset)</h3>
     <div id="loadingStatus" class="loading-box">⏳ Sedang memuat database, mohon tunggu sebentar...</div>
 
     <form id="bastForm" onsubmit="handleFormSubmit(event)" style="display:none;">
       
+      <!-- PILIH SURAT -->
       <label>Pilih Klasifikasi Surat:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_surat" placeholder="Ketik untuk mencari klasifikasi surat..." oninput="filterSurat(this.value)">
@@ -32,6 +36,7 @@
       <input type="text" name="hari_tanggal" id="hari_tanggal" placeholder="Hari & Tanggal" required>
       <hr>
 
+      <!-- PIHAK PERTAMA -->
       <label>Cari Pihak Pertama:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_p1" placeholder="Ketik nama pegawai..." oninput="filterPegawai(this.value, 'p1')">
@@ -43,6 +48,7 @@
       <input type="text" id="jabatan_p1" name="jabatan_p1" placeholder="Jabatan Pihak Pertama">
       <hr>
 
+      <!-- PIHAK KEDUA -->
       <label>Cari Pihak Kedua:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_p2" placeholder="Ketik nama pegawai..." oninput="filterPegawai(this.value, 'p2')">
@@ -54,21 +60,15 @@
       <input type="text" id="jabatan_p2" name="jabatan_p2" placeholder="Jabatan Pihak Kedua">
       <hr>
 
-      <label>Cari Barang / Aset:</label>
-      <div class="autocomplete-container">
-        <input type="text" id="cari_aset" placeholder="Ketik nama barang/merk/nopol..." oninput="filterAset(this.value)">
-        <div id="list_aset" class="suggestions-list"></div>
+      <!-- DETAIL BARANG / ASET (DINAMIS BISA DITAMBAH) -->
+      <h4>Daftar Barang / Kendaraan yang Diserahterimakan</h4>
+      <div id="container-aset">
+        <!-- Baris Aset Pertama otomatis muncul -->
       </div>
-      <input type="text" id="nama_barang" name="nama_barang" placeholder="Nama Barang">
-      <input type="text" id="merk_type" name="merk_type" placeholder="Merk/Type">
-      
-      <input type="text" id="no_seri" name="no_seri" placeholder="No. Polisi / No. Mesin / No. Rangka">
-      
-      <input type="text" id="tahun_perolehan" name="tahun_perolehan" placeholder="Tahun Perolehan">
-      <input type="text" name="jumlah" placeholder="Jumlah">
-      <input type="text" name="keterangan" placeholder="Keterangan">
+      <button type="button" onclick="tambahBarisAset()" style="background: #17a2b8; width: auto; font-size: 14px; padding: 6px 12px;">+ Tambah Baris Barang</button>
       <hr>
 
+      <!-- TTD PIHAK 1 -->
       <label>Cari TTD Pihak 1:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_ttd_p1" placeholder="Ketik nama penandatangan..." oninput="filterPegawai(this.value, 'ttd_p1')">
@@ -79,6 +79,7 @@
       <input type="text" name="nip_p1_ttd" id="nip_p1_ttd" placeholder="NIP TTD Pihak 1">
       <hr>
 
+      <!-- TTD PIHAK 2 -->
       <label>Cari TTD Pihak 2:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_ttd_p2" placeholder="Ketik nama penandatangan..." oninput="filterPegawai(this.value, 'ttd_p2')">
@@ -89,6 +90,7 @@
       <input type="text" name="nip_p2_ttd" id="nip_p2_ttd" placeholder="NIP TTD Pihak 2">
       <hr>
 
+      <!-- MENGETAHUI -->
       <label>Cari Yang Mengetahui:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_mengetahui" placeholder="Ketik nama penandatangan..." oninput="filterPegawai(this.value, 'mengetahui')">
@@ -99,11 +101,12 @@
       <input type="text" name="nip_mengetahui" id="nip_mengetahui" placeholder="NIP Mengetahui">
       <hr>
       
-      <button type="submit">Buat BAST</button>
+      <button type="submit" class="btn-success">Buat BAST Dokumen</button>
     </form>
 
     <script>
       const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzcne152gfjpKSsQ1KykMwNwfXHsGBPiU0Z3Wz5sf2jrTa1g1ZZQVt3BwucVp7KoUf70w/exec';
+      let rowIndex = 0;
 
       window.onload = function() {
         fetch(WEB_APP_URL + '?action=getData')
@@ -116,6 +119,9 @@
 
               document.getElementById('loadingStatus').style.display = 'none';
               document.getElementById('bastForm').style.display = 'block';
+              
+              // Tambahkan 1 baris aset default saat pertama kali load
+              tambahBarisAset();
             }
           })
           .catch(err => {
@@ -128,6 +134,34 @@
           document.querySelectorAll('.suggestions-list').forEach(el => el.innerHTML = '');
         }
       });
+
+      function tambahBarisAset() {
+        rowIndex++;
+        let container = document.getElementById('container-aset');
+        let div = document.createElement('div');
+        div.className = 'item-row';
+        div.id = 'row_aset_' + rowIndex;
+        div.innerHTML = `
+          <label>Cari Barang / Aset #${rowIndex}:</label>
+          <div class="autocomplete-container">
+            <input type="text" id="cari_aset_${rowIndex}" placeholder="Ketik nama barang/merk/nopol..." oninput="filterAset(this.value, ${rowIndex})">
+            <div id="list_aset_${rowIndex}" class="suggestions-list"></div>
+          </div>
+          <input type="text" id="nama_barang_${rowIndex}" placeholder="Nama Barang" required>
+          <input type="text" id="merk_type_${rowIndex}" placeholder="Merk/Type">
+          <input type="text" id="no_seri_${rowIndex}" placeholder="No. Polisi / No. Mesin / No. Rangka">
+          <input type="text" id="tahun_perolehan_${rowIndex}" placeholder="Tahun Perolehan">
+          <input type="text" id="jumlah_${rowIndex}" placeholder="Jumlah" value="1">
+          <input type="text" id="keterangan_${rowIndex}" placeholder="Keterangan">
+          ${rowIndex > 1 ? '<button type="button" class="btn-danger" onclick="hapusBaris(' + rowIndex + ')">Hapus Barang Ini</button>' : ''}
+        `;
+        container.appendChild(div);
+      }
+
+      function hapusBaris(id) {
+        let row = document.getElementById('row_aset_' + id);
+        if(row) row.remove();
+      }
 
       function filterSurat(val) {
         let list = document.getElementById('list_surat');
@@ -186,8 +220,8 @@
         });
       }
 
-      function filterAset(val) {
-        let list = document.getElementById('list_aset');
+      function filterAset(val, index) {
+        let list = document.getElementById('list_aset_' + index);
         list.innerHTML = '';
         if (!val) return;
         
@@ -201,18 +235,17 @@
           let div = document.createElement('div');
           div.innerHTML = `<b>${a[0]}</b> - ${a[1]} ${a[2] ? '(' + a[2] + ')' : ''}`;
           div.onclick = function() {
-            document.getElementById('cari_aset').value = a[0];
-            document.getElementById('nama_barang').value = a[0] || '';
-            document.getElementById('merk_type').value = a[1] || '';
+            document.getElementById('cari_aset_' + index).value = a[0];
+            document.getElementById('nama_barang_' + index).value = a[0] || '';
+            document.getElementById('merk_type_' + index).value = a[1] || '';
             
-            // Menggabungkan hanya nilai datanya saja (tanpa label tulisan)
             let nopol = a[2] || '';
             let nomesin = a[3] || '';
             let norangka = a[4] || '';
             let gabunganNomor = [nopol, nomesin, norangka].filter(Boolean).join(' | ');
             
-            document.getElementById('no_seri').value = gabunganNomor;
-            document.getElementById('tahun_perolehan').value = a[5] || '';
+            document.getElementById('no_seri_' + index).value = gabunganNomor;
+            document.getElementById('tahun_perolehan_' + index).value = a[5] || '';
             list.innerHTML = '';
           };
           list.appendChild(div);
@@ -221,11 +254,45 @@
 
       async function handleFormSubmit(event) {
         event.preventDefault();
-        alert('Sedang memproses, mohon tunggu...');
+        alert('Sedang memproses dokumen BAST, mohon tunggu...');
         
-        const form = document.getElementById('bastForm');
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+        // Kumpulkan data umum
+        const data = {
+          nomor_surat: document.getElementById('nomor_surat').value,
+          hari_tanggal: document.getElementById('hari_tanggal').value,
+          nama_p1: document.getElementById('nama_p1').value,
+          nip_p1: document.getElementById('nip_p1').value,
+          pangkat_p1: document.getElementById('pangkat_p1').value,
+          jabatan_p1: document.getElementById('jabatan_p1').value,
+          nama_p2: document.getElementById('nama_p2').value,
+          nip_p2: document.getElementById('nip_p2').value,
+          pangkat_p2: document.getElementById('pangkat_p2').value,
+          jabatan_p2: document.getElementById('jabatan_p2').value,
+          nama_p1_ttd: document.getElementById('nama_p1_ttd').value,
+          pangkat_p1_ttd: document.getElementById('pangkat_p1_ttd').value,
+          nip_p1_ttd: document.getElementById('nip_p1_ttd').value,
+          nama_p2_ttd: document.getElementById('nama_p2_ttd').value,
+          pangkat_p2_ttd: document.getElementById('pangkat_p2_ttd').value,
+          nip_p2_ttd: document.getElementById('nip_p2_ttd').value,
+          nama_mengetahui: document.getElementById('nama_mengetahui').value,
+          pangkat_mengetahui: document.getElementById('pangkat_mengetahui').value,
+          nip_mengetahui: document.getElementById('nip_mengetahui').value,
+          items: []
+        };
+
+        // Kumpulkan data dari semua baris aset yang ada
+        let rows = document.querySelectorAll('.item-row');
+        rows.forEach(row => {
+          let idMatch = row.id.split('_')[2];
+          data.items.push({
+            nama_barang: document.getElementById('nama_barang_' + idMatch).value,
+            merk_type: document.getElementById('merk_type_' + idMatch).value,
+            no_seri: document.getElementById('no_seri_' + idMatch).value,
+            tahun_perolehan: document.getElementById('tahun_perolehan_' + idMatch).value,
+            jumlah: document.getElementById('jumlah_' + idMatch).value,
+            keterangan: document.getElementById('keterangan_' + idMatch).value
+          });
+        });
 
         try {
           const response = await fetch(WEB_APP_URL, {
