@@ -21,20 +21,25 @@
     </style>
   </head>
   <body>
-    <h3>Form Otomasi BAST Satpol PP (Multi-Aset)</h3>
+    <h3>Form Otomasi Dokumen Satpol PP</h3>
     <div id="loadingStatus" class="loading-box">⏳ Sedang memuat database, mohon tunggu sebentar...</div>
 
     <form id="bastForm" onsubmit="handleFormSubmit(event)" style="display:none;">
       
-      <label>Pilih Klasifikasi Surat:</label>
+      <!-- PILIH JENIS SURAT (Autocomplete dari MasterTemplate) -->
+      <label>Pilih Jenis Surat:</label>
       <div class="autocomplete-container">
-        <input type="text" id="cari_surat" placeholder="Ketik untuk mencari klasifikasi surat..." oninput="filterSurat(this.value)">
-        <div id="list_surat" class="suggestions-list"></div>
+        <input type="text" id="cari_template" placeholder="Ketik jenis surat (contoh: BAST, Surat Kuasa, Nota Dinas)..." oninput="filterTemplate(this.value)">
+        <div id="list_template" class="suggestions-list"></div>
       </div>
+      <input type="hidden" id="template_id" name="template_id">
+      <input type="hidden" id="jenis_surat" name="jenis_surat">
+
       <input type="text" name="nomor_surat" id="nomor_surat" placeholder="Nomor Surat" required>
       <input type="text" name="hari_tanggal" id="hari_tanggal" placeholder="Hari & Tanggal" required>
       <hr>
 
+      <!-- PIHAK PERTAMA -->
       <label>Cari Pihak Pertama:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_p1" placeholder="Ketik nama pegawai..." oninput="filterPegawai(this.value, 'p1')">
@@ -46,6 +51,7 @@
       <input type="text" id="jabatan_p1" name="jabatan_p1" placeholder="Jabatan Pihak Pertama">
       <hr>
 
+      <!-- PIHAK KEDUA -->
       <label>Cari Pihak Kedua:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_p2" placeholder="Ketik nama pegawai..." oninput="filterPegawai(this.value, 'p2')">
@@ -57,11 +63,15 @@
       <input type="text" id="jabatan_p2" name="jabatan_p2" placeholder="Jabatan Pihak Kedua">
       <hr>
 
-      <h4>Daftar Barang / Kendaraan yang Diserahterimakan</h4>
-      <div id="container-aset"></div>
-      <button type="button" onclick="tambahBarisAset()" style="background: #17a2b8; width: auto; font-size: 14px; padding: 6px 12px;">+ Tambah Baris Barang</button>
-      <hr>
+      <!-- SECTION BARANG / ASET (Akan disembunyikan otomatis jika bukan surat yang butuh barang) -->
+      <div id="section_barang" style="display:none;">
+        <h4>Daftar Barang / Kendaraan yang Diserahterimakan</h4>
+        <div id="container-aset"></div>
+        <button type="button" onclick="tambahBarisAset()" style="background: #17a2b8; width: auto; font-size: 14px; padding: 6px 12px;">+ Tambah Baris Barang</button>
+        <hr>
+      </div>
 
+      <!-- TTD PIHAK 1 -->
       <label>Cari TTD Pihak 1:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_ttd_p1" placeholder="Ketik nama penandatangan..." oninput="filterPegawai(this.value, 'ttd_p1')">
@@ -72,6 +82,7 @@
       <input type="text" name="nip_p1_ttd" id="nip_p1_ttd" placeholder="NIP TTD Pihak 1">
       <hr>
 
+      <!-- TTD PIHAK 2 -->
       <label>Cari TTD Pihak 2:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_ttd_p2" placeholder="Ketik nama penandatangan..." oninput="filterPegawai(this.value, 'ttd_p2')">
@@ -82,6 +93,7 @@
       <input type="text" name="nip_p2_ttd" id="nip_p2_ttd" placeholder="NIP TTD Pihak 2">
       <hr>
 
+      <!-- MENGETAHUI -->
       <label>Cari Yang Mengetahui:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_mengetahui" placeholder="Ketik nama penandatangan..." oninput="filterPegawai(this.value, 'mengetahui')">
@@ -92,7 +104,7 @@
       <input type="text" name="nip_mengetahui" id="nip_mengetahui" placeholder="NIP Mengetahui">
       <hr>
       
-      <button type="submit" class="btn-success">Buat BAST Dokumen</button>
+      <button type="submit" class="btn-success">Buat Dokumen Surat</button>
     </form>
 
     <script>
@@ -106,7 +118,7 @@
             if(res.status === 'success') {
               window.dataPegawai = res.pegawai;
               window.dataAset = res.aset;
-              window.dataSurat = res.surat;
+              window.dataTemplates = res.templates; // Mengambil data MasterTemplate
 
               document.getElementById('loadingStatus').style.display = 'none';
               document.getElementById('bastForm').style.display = 'block';
@@ -137,11 +149,9 @@
             <input type="text" id="cari_aset_${rowIndex}" placeholder="Ketik nama barang/merk/nopol..." oninput="filterAset(this.value, ${rowIndex})">
             <div id="list_aset_${rowIndex}" class="suggestions-list"></div>
           </div>
-          <input type="text" id="nama_barang_${rowIndex}" placeholder="Nama Barang" required>
+          <input type="text" id="nama_barang_${rowIndex}" placeholder="Nama Barang">
           <input type="text" id="merk_type_${rowIndex}" placeholder="Merk/Type">
-          
           <input type="text" id="no_seri_${rowIndex}" placeholder="No. Polisi / No. Mesin / No. Rangka">
-          
           <input type="text" id="tahun_perolehan_${rowIndex}" placeholder="Tahun Perolehan">
           <input type="text" id="jumlah_${rowIndex}" placeholder="Jumlah" value="1">
           <input type="text" id="keterangan_${rowIndex}" placeholder="Keterangan">
@@ -155,18 +165,26 @@
         if(row) row.remove();
       }
 
-      function filterSurat(val) {
-        let list = document.getElementById('list_surat');
+      // Autocomplete untuk MasterTemplate Surat
+      function filterTemplate(val) {
+        let list = document.getElementById('list_template');
         list.innerHTML = '';
         if (!val) return;
-        let matches = window.dataSurat.filter(s => s[0].toLowerCase().includes(val.toLowerCase()));
-        matches.forEach(s => {
+        
+        let matches = window.dataTemplates.filter(t => t[0].toLowerCase().includes(val.toLowerCase()));
+        matches.forEach(t => {
           let div = document.createElement('div');
-          div.innerHTML = s[0];
+          div.innerHTML = `<b>${t[0]}</b>`;
           div.onclick = function() {
-            document.getElementById('cari_surat').value = s[0];
-            document.getElementById('nomor_surat').value = s[1] || '';
-            document.getElementById('hari_tanggal').value = s[2] || '';
+            document.getElementById('cari_template').value = t[0];
+            document.getElementById('jenis_surat').value = t[0];
+            document.getElementById('template_id').value = t[1]; // ID Google Docs Template
+
+            // Jika nama surat mengandung BAST atau Penghapusan, tampilkan section barang, jika tidak sembunyikan
+            let namaSuratUpper = t[0].toUpperCase();
+            let pakaiBarang = namaSuratUpper.includes('BAST') || namaSuratUpper.includes('PENGHAPUSAN');
+            document.getElementById('section_barang').style.display = pakaiBarang ? 'block' : 'none';
+
             list.innerHTML = '';
           };
           list.appendChild(div);
@@ -231,7 +249,6 @@
             document.getElementById('nama_barang_' + index).value = a[0] || '';
             document.getElementById('merk_type_' + index).value = a[1] || '';
             
-            // Menggabungkan No Polisi, No Mesin, dan No Rangka secara sepaket (tanpa label teks)
             let nopol = a[2] || '';
             let nomesin = a[3] || '';
             let norangka = a[4] || '';
@@ -247,9 +264,17 @@
 
       async function handleFormSubmit(event) {
         event.preventDefault();
-        alert('Sedang memproses dokumen BAST, mohon tunggu...');
+        
+        if(!document.getElementById('template_id').value) {
+          alert('Silakan pilih Jenis Surat terlebih dahulu dari pilihan autocomplete!');
+          return;
+        }
+
+        alert('Sedang memproses dokumen, mohon tunggu...');
         
         const data = {
+          template_id: document.getElementById('template_id').value,
+          jenis_surat: document.getElementById('jenis_surat').value,
           nomor_surat: document.getElementById('nomor_surat').value,
           hari_tanggal: document.getElementById('hari_tanggal').value,
           nama_p1: document.getElementById('nama_p1').value,
@@ -272,18 +297,22 @@
           items: []
         };
 
-        let rows = document.querySelectorAll('.item-row');
-        rows.forEach(row => {
-          let idMatch = row.id.split('_')[2];
-          data.items.push({
-            nama_barang: document.getElementById('nama_barang_' + idMatch).value,
-            merk_type: document.getElementById('merk_type_' + idMatch).value,
-            no_seri: document.getElementById('no_seri_' + idMatch).value,
-            tahun_perolehan: document.getElementById('tahun_perolehan_' + idMatch).value,
-            jumlah: document.getElementById('jumlah_' + idMatch).value,
-            keterangan: document.getElementById('keterangan_' + idMatch).value
+        // Hanya ambil data barang jika section barang sedang aktif/tampil
+        let sectionBarang = document.getElementById('section_barang');
+        if (sectionBarang.style.display !== 'none') {
+          let rows = document.querySelectorAll('.item-row');
+          rows.forEach(row => {
+            let idMatch = row.id.split('_')[2];
+            data.items.push({
+              nama_barang: document.getElementById('nama_barang_' + idMatch).value,
+              merk_type: document.getElementById('merk_type_' + idMatch).value,
+              no_seri: document.getElementById('no_seri_' + idMatch).value,
+              tahun_perolehan: document.getElementById('tahun_perolehan_' + idMatch).value,
+              jumlah: document.getElementById('jumlah_' + idMatch).value,
+              keterangan: document.getElementById('keterangan_' + idMatch).value
+            });
           });
-        });
+        }
 
         try {
           const response = await fetch(WEB_APP_URL, {
