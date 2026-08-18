@@ -205,10 +205,10 @@
             document.getElementById('nama_barang').value = a[0] || '';
             document.getElementById('merk_type').value = a[1] || '';
             
-            // Menggabungkan No Polisi, No Mesin, dan No Rangka jadi sepaket
-            let nopol = a[2] ? 'No. Pol: ' + a[2] : '';
-            let nomesin = a[3] ? 'No. Mesin: ' + a[3] : '';
-            let norangka = a[4] ? 'No. Rangka: ' + a[4] : '';
+            // Menggabungkan hanya nilai datanya saja (tanpa label tulisan)
+            let nopol = a[2] || '';
+            let nomesin = a[3] || '';
+            let norangka = a[4] || '';
             let gabunganNomor = [nopol, nomesin, norangka].filter(Boolean).join(' | ');
             
             document.getElementById('no_seri').value = gabunganNomor;
