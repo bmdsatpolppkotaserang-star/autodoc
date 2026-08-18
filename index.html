@@ -26,7 +26,6 @@
 
     <form id="bastForm" onsubmit="handleFormSubmit(event)" style="display:none;">
       
-      <!-- PILIH SURAT -->
       <label>Pilih Klasifikasi Surat:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_surat" placeholder="Ketik untuk mencari klasifikasi surat..." oninput="filterSurat(this.value)">
@@ -36,7 +35,6 @@
       <input type="text" name="hari_tanggal" id="hari_tanggal" placeholder="Hari & Tanggal" required>
       <hr>
 
-      <!-- PIHAK PERTAMA -->
       <label>Cari Pihak Pertama:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_p1" placeholder="Ketik nama pegawai..." oninput="filterPegawai(this.value, 'p1')">
@@ -48,7 +46,6 @@
       <input type="text" id="jabatan_p1" name="jabatan_p1" placeholder="Jabatan Pihak Pertama">
       <hr>
 
-      <!-- PIHAK KEDUA -->
       <label>Cari Pihak Kedua:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_p2" placeholder="Ketik nama pegawai..." oninput="filterPegawai(this.value, 'p2')">
@@ -60,15 +57,11 @@
       <input type="text" id="jabatan_p2" name="jabatan_p2" placeholder="Jabatan Pihak Kedua">
       <hr>
 
-      <!-- DETAIL BARANG / ASET (DINAMIS BISA DITAMBAH) -->
       <h4>Daftar Barang / Kendaraan yang Diserahterimakan</h4>
-      <div id="container-aset">
-        <!-- Baris Aset Pertama otomatis muncul -->
-      </div>
+      <div id="container-aset"></div>
       <button type="button" onclick="tambahBarisAset()" style="background: #17a2b8; width: auto; font-size: 14px; padding: 6px 12px;">+ Tambah Baris Barang</button>
       <hr>
 
-      <!-- TTD PIHAK 1 -->
       <label>Cari TTD Pihak 1:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_ttd_p1" placeholder="Ketik nama penandatangan..." oninput="filterPegawai(this.value, 'ttd_p1')">
@@ -79,7 +72,6 @@
       <input type="text" name="nip_p1_ttd" id="nip_p1_ttd" placeholder="NIP TTD Pihak 1">
       <hr>
 
-      <!-- TTD PIHAK 2 -->
       <label>Cari TTD Pihak 2:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_ttd_p2" placeholder="Ketik nama penandatangan..." oninput="filterPegawai(this.value, 'ttd_p2')">
@@ -90,7 +82,6 @@
       <input type="text" name="nip_p2_ttd" id="nip_p2_ttd" placeholder="NIP TTD Pihak 2">
       <hr>
 
-      <!-- MENGETAHUI -->
       <label>Cari Yang Mengetahui:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_mengetahui" placeholder="Ketik nama penandatangan..." oninput="filterPegawai(this.value, 'mengetahui')">
@@ -120,7 +111,6 @@
               document.getElementById('loadingStatus').style.display = 'none';
               document.getElementById('bastForm').style.display = 'block';
               
-              // Tambahkan 1 baris aset default saat pertama kali load
               tambahBarisAset();
             }
           })
@@ -149,7 +139,9 @@
           </div>
           <input type="text" id="nama_barang_${rowIndex}" placeholder="Nama Barang" required>
           <input type="text" id="merk_type_${rowIndex}" placeholder="Merk/Type">
+          
           <input type="text" id="no_seri_${rowIndex}" placeholder="No. Polisi / No. Mesin / No. Rangka">
+          
           <input type="text" id="tahun_perolehan_${rowIndex}" placeholder="Tahun Perolehan">
           <input type="text" id="jumlah_${rowIndex}" placeholder="Jumlah" value="1">
           <input type="text" id="keterangan_${rowIndex}" placeholder="Keterangan">
@@ -239,6 +231,7 @@
             document.getElementById('nama_barang_' + index).value = a[0] || '';
             document.getElementById('merk_type_' + index).value = a[1] || '';
             
+            // Menggabungkan No Polisi, No Mesin, dan No Rangka secara sepaket (tanpa label teks)
             let nopol = a[2] || '';
             let nomesin = a[3] || '';
             let norangka = a[4] || '';
@@ -256,7 +249,6 @@
         event.preventDefault();
         alert('Sedang memproses dokumen BAST, mohon tunggu...');
         
-        // Kumpulkan data umum
         const data = {
           nomor_surat: document.getElementById('nomor_surat').value,
           hari_tanggal: document.getElementById('hari_tanggal').value,
@@ -280,7 +272,6 @@
           items: []
         };
 
-        // Kumpulkan data dari semua baris aset yang ada
         let rows = document.querySelectorAll('.item-row');
         rows.forEach(row => {
           let idMatch = row.id.split('_')[2];
