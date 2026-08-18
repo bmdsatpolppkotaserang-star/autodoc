@@ -26,7 +26,6 @@
 
     <form id="bastForm" onsubmit="handleFormSubmit(event)" style="display:none;">
       
-      <!-- PILIH JENIS SURAT (Autocomplete dari MasterTemplate) -->
       <label>Pilih Jenis Surat:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_template" placeholder="Ketik jenis surat (contoh: BAST, Surat Kuasa, Nota Dinas)..." oninput="filterTemplate(this.value)">
@@ -39,7 +38,6 @@
       <input type="text" name="hari_tanggal" id="hari_tanggal" placeholder="Hari & Tanggal" required>
       <hr>
 
-      <!-- PIHAK PERTAMA -->
       <label>Cari Pihak Pertama:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_p1" placeholder="Ketik nama pegawai..." oninput="filterPegawai(this.value, 'p1')">
@@ -51,7 +49,6 @@
       <input type="text" id="jabatan_p1" name="jabatan_p1" placeholder="Jabatan Pihak Pertama">
       <hr>
 
-      <!-- PIHAK KEDUA -->
       <label>Cari Pihak Kedua:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_p2" placeholder="Ketik nama pegawai..." oninput="filterPegawai(this.value, 'p2')">
@@ -63,7 +60,6 @@
       <input type="text" id="jabatan_p2" name="jabatan_p2" placeholder="Jabatan Pihak Kedua">
       <hr>
 
-      <!-- SECTION BARANG / ASET (Akan disembunyikan otomatis jika bukan surat yang butuh barang) -->
       <div id="section_barang" style="display:none;">
         <h4>Daftar Barang / Kendaraan yang Diserahterimakan</h4>
         <div id="container-aset"></div>
@@ -71,7 +67,6 @@
         <hr>
       </div>
 
-      <!-- TTD PIHAK 1 -->
       <label>Cari TTD Pihak 1:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_ttd_p1" placeholder="Ketik nama penandatangan..." oninput="filterPegawai(this.value, 'ttd_p1')">
@@ -82,7 +77,6 @@
       <input type="text" name="nip_p1_ttd" id="nip_p1_ttd" placeholder="NIP TTD Pihak 1">
       <hr>
 
-      <!-- TTD PIHAK 2 -->
       <label>Cari TTD Pihak 2:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_ttd_p2" placeholder="Ketik nama penandatangan..." oninput="filterPegawai(this.value, 'ttd_p2')">
@@ -93,7 +87,6 @@
       <input type="text" name="nip_p2_ttd" id="nip_p2_ttd" placeholder="NIP TTD Pihak 2">
       <hr>
 
-      <!-- MENGETAHUI -->
       <label>Cari Yang Mengetahui:</label>
       <div class="autocomplete-container">
         <input type="text" id="cari_mengetahui" placeholder="Ketik nama penandatangan..." oninput="filterPegawai(this.value, 'mengetahui')">
@@ -165,7 +158,7 @@
         if(row) row.remove();
       }
 
-      // Autocomplete untuk MasterTemplate Surat
+      // Autocomplete untuk MasterTemplate Surat & Auto-fill Nomor Surat
       function filterTemplate(val) {
         let list = document.getElementById('list_template');
         list.innerHTML = '';
@@ -179,6 +172,11 @@
             document.getElementById('cari_template').value = t[0];
             document.getElementById('jenis_surat').value = t[0];
             document.getElementById('template_id').value = t[1]; // ID Google Docs Template
+            
+            // Otomatis mengisi Nomor Surat dari Kolom C (index 2) di MasterTemplate jika ada
+            if (t[2]) {
+              document.getElementById('nomor_surat').value = t[2];
+            }
 
             // Jika nama surat mengandung BAST atau Penghapusan, tampilkan section barang, jika tidak sembunyikan
             let namaSuratUpper = t[0].toUpperCase();
@@ -297,7 +295,6 @@
           items: []
         };
 
-        // Hanya ambil data barang jika section barang sedang aktif/tampil
         let sectionBarang = document.getElementById('section_barang');
         if (sectionBarang.style.display !== 'none') {
           let rows = document.querySelectorAll('.item-row');
