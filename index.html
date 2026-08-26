@@ -191,8 +191,11 @@
         <label>Nomor Surat:</label>
         <input type="text" name="nomor_surat" id="nomor_surat" placeholder="Masukkan Nomor Surat" autocomplete="off" required>
         
-        <label>Tanggal / Hari & Tanggal:</label>
-        <input type="text" name="hari_tanggal" id="hari_tanggal" placeholder="Contoh: 31 Juli 2026" autocomplete="off" required>
+        <label>Tanggal Penugasan (Isi Surat / Hari & Tanggal):</label>
+        <input type="text" name="hari_tanggal" id="hari_tanggal" placeholder="Contoh: 01 s/d 31 Agustus 2026" autocomplete="off" required>
+
+        <label>Tanggal Dikeluarkan / Tanggal TTD Surat:</label>
+        <input type="text" name="tanggal_dikeluarkan" id="tanggal_dikeluarkan" placeholder="Contoh: 31 Juli 2026" autocomplete="off" required>
         
         <hr>
 
@@ -462,6 +465,7 @@
           jenis_surat: document.getElementById('jenis_surat').value,
           nomor_surat: document.getElementById('nomor_surat').value,
           hari_tanggal: document.getElementById('hari_tanggal').value,
+          tanggal_dikeluarkan: document.getElementById('tanggal_dikeluarkan').value,
           nama_p1: document.getElementById('nama_p1').value,
           pangkat_p1: document.getElementById('pangkat_p1').value,
           nip_p1: document.getElementById('nip_p1').value,
