@@ -188,75 +188,80 @@
         <input type="hidden" id="template_id" name="template_id">
         <input type="hidden" id="jenis_surat" name="jenis_surat">
 
-        <label>Nomor Surat:</label>
-        <input type="text" name="nomor_surat" id="nomor_surat" placeholder="Masukkan Nomor Surat" autocomplete="off" required>
-        
-        <label>Tanggal Penugasan (Isi Surat / Hari & Tanggal):</label>
-        <input type="text" name="hari_tanggal" id="hari_tanggal" placeholder="Contoh: 01 s/d 31 Agustus 2026" autocomplete="off" required>
-
-        <!-- Bagian Tanggal Dikeluarkan (Di-hide otomatis jika memilih BAST) -->
-        <div id="section_tanggal_dikeluarkan" style="display:none;">
-          <label>Tanggal Dikeluarkan / Tanggal TTD Surat:</label>
-          <input type="text" name="tanggal_dikeluarkan" id="tanggal_dikeluarkan" placeholder="Contoh: 31 Juli 2026" autocomplete="off">
-        </div>
-        
-        <hr>
-
-        <!-- Section Khusus BAST (Tabel Barang) -->
-        <div id="section_barang" style="display:none;">
-          <h4>Daftar Barang / Aset Diserahterimakan</h4>
-          <div id="container-aset"></div>
-          <button type="button" class="btn-info" onclick="tambahBarisAset()">+ Tambah Barang</button>
-          <hr>
-        </div>
-
-        <!-- Section Khusus SPT (Tabel Personel) -->
-        <div id="section_spt" style="display:none;">
-          <h4>Daftar Anggota / Personel yang Ditugaskan</h4>
-          <div id="container-personel"></div>
-          <button type="button" class="btn-info" onclick="tambahBarisPersonel()">+ Tambah Anggota</button>
-          <hr>
-        </div>
-
-        <!-- Section Pihak 1 & Pihak 2 -->
-        <div id="section_pihak" style="display:none;">
-          <h4>Pihak - Pihak Terkait</h4>
+        <!-- SEMUA ISI FORM DI-HIDE DI AWAL, MUNCUL SETELAH PILIH TEMPLATE -->
+        <div id="form_content" style="display:none;">
           
-          <label>Cari Pihak 1 (Yang Menyerahkan):</label>
-          <div class="autocomplete-container">
-            <input type="text" id="cari_p1" placeholder="Ketik nama Pihak 1..." autocomplete="off" oninput="filterPegawai(this.value, 'p1')">
-            <div id="list_p1" class="suggestions-list"></div>
-          </div>
-          <input type="text" name="nama_p1" id="nama_p1" placeholder="Nama Pihak 1">
-          <input type="text" name="pangkat_p1" id="pangkat_p1" placeholder="Pangkat Pihak 1">
-          <input type="text" name="nip_p1" id="nip_p1" placeholder="NIP Pihak 1">
-          <input type="text" name="jabatan_p1" id="jabatan_p1" placeholder="Jabatan Pihak 1">
+          <label>Nomor Surat:</label>
+          <input type="text" name="nomor_surat" id="nomor_surat" placeholder="Masukkan Nomor Surat" autocomplete="off">
+          
+          <label>Tanggal Penugasan (Isi Surat / Hari & Tanggal):</label>
+          <input type="text" name="hari_tanggal" id="hari_tanggal" placeholder="Contoh: 01 s/d 31 Agustus 2026" autocomplete="off">
 
-          <label style="margin-top: 15px;">Cari Pihak 2 (Yang Menerima):</label>
-          <div class="autocomplete-container">
-            <input type="text" id="cari_p2" placeholder="Ketik nama Pihak 2..." autocomplete="off" oninput="filterPegawai(this.value, 'p2')">
-            <div id="list_p2" class="suggestions-list"></div>
+          <!-- Tanggal Dikeluarkan (Hanya muncul jika SPT) -->
+          <div id="section_tanggal_dikeluarkan" style="display:none;">
+            <label>Tanggal Dikeluarkan / Tanggal TTD Surat:</label>
+            <input type="text" name="tanggal_dikeluarkan" id="tanggal_dikeluarkan" placeholder="Contoh: 31 Juli 2026" autocomplete="off">
           </div>
-          <input type="text" name="nama_p2" id="nama_p2" placeholder="Nama Pihak 2">
-          <input type="text" name="pangkat_p2" id="pangkat_p2" placeholder="Pangkat Pihak 2">
-          <input type="text" name="nip_p2" id="nip_p2" placeholder="NIP Pihak 2">
-          <input type="text" name="jabatan_p2" id="jabatan_p2" placeholder="Jabatan Pihak 2">
           
           <hr>
+
+          <!-- Section Khusus BAST (Tabel Barang) -->
+          <div id="section_barang" style="display:none;">
+            <h4>Daftar Barang / Aset Diserahterimakan</h4>
+            <div id="container-aset"></div>
+            <button type="button" class="btn-info" onclick="tambahBarisAset()">+ Tambah Barang</button>
+            <hr>
+          </div>
+
+          <!-- Section Khusus SPT (Tabel Personel) -->
+          <div id="section_spt" style="display:none;">
+            <h4>Daftar Anggota / Personel yang Ditugaskan</h4>
+            <div id="container-personel"></div>
+            <button type="button" class="btn-info" onclick="tambahBarisPersonel()">+ Tambah Anggota</button>
+            <hr>
+          </div>
+
+          <!-- Section Pihak 1 & Pihak 2 -->
+          <div id="section_pihak" style="display:none;">
+            <h4>Pihak - Pihak Terkait</h4>
+            
+            <label>Cari Pihak 1 (Yang Menyerahkan):</label>
+            <div class="autocomplete-container">
+              <input type="text" id="cari_p1" placeholder="Ketik nama Pihak 1..." autocomplete="off" oninput="filterPegawai(this.value, 'p1')">
+              <div id="list_p1" class="suggestions-list"></div>
+            </div>
+            <input type="text" name="nama_p1" id="nama_p1" placeholder="Nama Pihak 1">
+            <input type="text" name="pangkat_p1" id="pangkat_p1" placeholder="Pangkat Pihak 1">
+            <input type="text" name="nip_p1" id="nip_p1" placeholder="NIP Pihak 1">
+            <input type="text" name="jabatan_p1" id="jabatan_p1" placeholder="Jabatan Pihak 1">
+
+            <label style="margin-top: 15px;">Cari Pihak 2 (Yang Menerima):</label>
+            <div class="autocomplete-container">
+              <input type="text" id="cari_p2" placeholder="Ketik nama Pihak 2..." autocomplete="off" oninput="filterPegawai(this.value, 'p2')">
+              <div id="list_p2" class="suggestions-list"></div>
+            </div>
+            <input type="text" name="nama_p2" id="nama_p2" placeholder="Nama Pihak 2">
+            <input type="text" name="pangkat_p2" id="pangkat_p2" placeholder="Pangkat Pihak 2">
+            <input type="text" name="nip_p2" id="nip_p2" placeholder="NIP Pihak 2">
+            <input type="text" name="jabatan_p2" id="jabatan_p2" placeholder="Jabatan Pihak 2">
+            
+            <hr>
+          </div>
+
+          <!-- Pejabat Mengetahui / TTD -->
+          <h4>Pejabat Penandatangan / Mengetahui</h4>
+          <label>Cari Pejabat:</label>
+          <div class="autocomplete-container">
+            <input type="text" id="cari_mengetahui" placeholder="Ketik nama pejabat..." autocomplete="off" oninput="filterPegawai(this.value, 'mengetahui')">
+            <div id="list_mengetahui" class="suggestions-list"></div>
+          </div>
+          <input type="text" name="nama_mengetahui" id="nama_mengetahui" placeholder="Nama Pejabat">
+          <input type="text" name="pangkat_mengetahui" id="pangkat_mengetahui" placeholder="Pangkat / Golongan">
+          <input type="text" name="nip_mengetahui" id="nip_mengetahui" placeholder="NIP Pejabat">
+          
+          <button type="submit" class="btn-success">Buat Dokumen Surat</button>
         </div>
 
-        <!-- Pejabat Mengetahui / TTD -->
-        <h4>Pejabat Penandatangan / Mengetahui</h4>
-        <label>Cari Pejabat:</label>
-        <div class="autocomplete-container">
-          <input type="text" id="cari_mengetahui" placeholder="Ketik nama pejabat..." autocomplete="off" oninput="filterPegawai(this.value, 'mengetahui')">
-          <div id="list_mengetahui" class="suggestions-list"></div>
-        </div>
-        <input type="text" name="nama_mengetahui" id="nama_mengetahui" placeholder="Nama Pejabat">
-        <input type="text" name="pangkat_mengetahui" id="pangkat_mengetahui" placeholder="Pangkat / Golongan">
-        <input type="text" name="nip_mengetahui" id="nip_mengetahui" placeholder="NIP Pejabat">
-        
-        <button type="submit" class="btn-success">Buat Dokumen Surat</button>
       </form>
     </div>
 
@@ -348,7 +353,11 @@
       function filterTemplate(val) {
         let list = document.getElementById('list_template');
         list.innerHTML = '';
-        if (!val) return;
+        if (!val) {
+          // Jika input template dikosongkan kembali, sembunyikan form isian
+          document.getElementById('form_content').style.display = 'none';
+          return;
+        }
         
         let matches = window.dataTemplates.filter(t => t[0].toLowerCase().includes(val.toLowerCase()));
         matches.forEach(t => {
@@ -363,18 +372,19 @@
               document.getElementById('nomor_surat').value = t[2];
             }
 
+            // Munculkan keseluruhan form isian begitu template dipilih
+            document.getElementById('form_content').style.display = 'block';
+
             let namaSuratUpper = t[0].toUpperCase();
             
             let pakaiBarang = namaSuratUpper.includes('BAST') || namaSuratUpper.includes('SERAH');
             let pakaiSPT = namaSuratUpper.includes('TUGAS') || namaSuratUpper.includes('SPT');
             let pakaiPihak = namaSuratUpper.includes('BAST');
 
-            // Tampilkan / Sembunyikan Section berdasarkan jenis surat
+            // Tampilkan / Sembunyikan bagian spesifik sesuai jenis surat
             document.getElementById('section_barang').style.display = pakaiBarang ? 'block' : 'none';
             document.getElementById('section_spt').style.display = pakaiSPT ? 'block' : 'none';
             document.getElementById('section_pihak').style.display = pakaiPihak ? 'block' : 'none';
-            
-            // Tanggal dikeluarkan HANYA muncul jika SPT, di-hide jika BAST/lainnya
             document.getElementById('section_tanggal_dikeluarkan').style.display = pakaiSPT ? 'block' : 'none';
 
             list.innerHTML = '';
