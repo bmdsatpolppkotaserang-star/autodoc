@@ -354,7 +354,6 @@
         let list = document.getElementById('list_template');
         list.innerHTML = '';
         if (!val) {
-          // Jika input template dikosongkan kembali, sembunyikan form isian
           document.getElementById('form_content').style.display = 'none';
           return;
         }
@@ -372,7 +371,6 @@
               document.getElementById('nomor_surat').value = t[2];
             }
 
-            // Munculkan keseluruhan form isian begitu template dipilih
             document.getElementById('form_content').style.display = 'block';
 
             let namaSuratUpper = t[0].toUpperCase();
@@ -381,7 +379,6 @@
             let pakaiSPT = namaSuratUpper.includes('TUGAS') || namaSuratUpper.includes('SPT');
             let pakaiPihak = namaSuratUpper.includes('BAST');
 
-            // Tampilkan / Sembunyikan bagian spesifik sesuai jenis surat
             document.getElementById('section_barang').style.display = pakaiBarang ? 'block' : 'none';
             document.getElementById('section_spt').style.display = pakaiSPT ? 'block' : 'none';
             document.getElementById('section_pihak').style.display = pakaiPihak ? 'block' : 'none';
