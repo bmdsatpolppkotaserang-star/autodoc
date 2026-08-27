@@ -211,7 +211,7 @@
             <hr>
           </div>
 
-          <!-- Section Khusus SPT (Pengaturan Personel: Ganti atau Hapus) -->
+          <!-- Section Khusus SPT (Pengaturan Personel: Ganti atau Hapus via Autocomplete) -->
           <div id="section_spt" style="display:none;">
             <h4>Pengaturan Personel di Dokumen (Ganti / Hapus)</h4>
             
@@ -310,8 +310,12 @@
             <option value="hapus">Hapus Nama dari Tabel</option>
           </select>
 
-          <label>Ketik Nama Personel Asli yang Mau Disasar:</label>
-          <input type="text" id="target_nama_${modifyIndex}" placeholder="Misal: Suardi" autocomplete="off">
+          <label>Cari Nama Personel Asli yang Mau Disasar:</label>
+          <div class="autocomplete-container">
+            <input type="text" id="cari_target_${modifyIndex}" placeholder="Ketik nama personel yang mau diganti/dihapus..." autocomplete="off" oninput="filterTargetModify(this.value, ${modifyIndex})">
+            <div id="list_target_${modifyIndex}" class="suggestions-list"></div>
+          </div>
+          <input type="hidden" id="target_nama_${modifyIndex}">
 
           <div id="wrap_pengganti_${modifyIndex}">
             <label>Cari Anggota Pengganti dari Database:</label>
@@ -337,6 +341,25 @@
       function hapusBarisModify(id) {
         let row = document.getElementById('row_mod_' + id);
         if(row) row.remove();
+      }
+
+      function filterTargetModify(val, index) {
+        let list = document.getElementById('list_target_' + index);
+        list.innerHTML = '';
+        if (!val) return;
+        
+        // Menggunakan master personel atau data pegawai untuk pilihan target
+        let matches = window.dataMasterPersonel.filter(p => p[0] && p[0].toLowerCase().includes(val.toLowerCase()));
+        matches.forEach(p => {
+          let div = document.createElement('div');
+          div.innerHTML = `<b>${p[0]}</b> - ${p[1]}`;
+          div.onclick = function() {
+            document.getElementById('cari_target_' + index).value = p[0];
+            document.getElementById('target_nama_' + index).value = p[0];
+            list.innerHTML = '';
+          };
+          list.appendChild(div);
+        });
       }
 
       function tambahBarisAset() {
