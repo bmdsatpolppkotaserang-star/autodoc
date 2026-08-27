@@ -68,7 +68,7 @@
         transition: border-color 0.2s, box-shadow 0.2s;
       }
 
-      input:focus { 
+      input:focus, select:focus { 
         outline: none; 
         border-color: var(--primary); 
         box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); 
@@ -188,7 +188,6 @@
         <input type="hidden" id="template_id" name="template_id">
         <input type="hidden" id="jenis_surat" name="jenis_surat">
 
-        <!-- SEMUA ISI FORM DI-HIDE DI AWAL, MUNCUL SETELAH PILIH TEMPLATE -->
         <div id="form_content" style="display:none;">
           
           <label>Nomor Surat:</label>
@@ -197,7 +196,6 @@
           <label>Tanggal Penugasan (Isi Surat / Hari & Tanggal):</label>
           <input type="text" name="hari_tanggal" id="hari_tanggal" placeholder="Contoh: 01 s/d 31 Agustus 2026" autocomplete="off">
 
-          <!-- Tanggal Dikeluarkan (Hanya muncul jika SPT) -->
           <div id="section_tanggal_dikeluarkan" style="display:none;">
             <label>Tanggal Dikeluarkan / Tanggal TTD Surat:</label>
             <input type="text" name="tanggal_dikeluarkan" id="tanggal_dikeluarkan" placeholder="Contoh: 31 Juli 2026" autocomplete="off">
@@ -215,9 +213,26 @@
 
           <!-- Section Khusus SPT (Tabel Personel) -->
           <div id="section_spt" style="display:none;">
-            <h4>Daftar Anggota / Personel yang Ditugaskan</h4>
-            <div id="container-personel"></div>
-            <button type="button" class="btn-info" onclick="tambahBarisPersonel()">+ Tambah Anggota</button>
+            <h4>Pengaturan Anggota / Personel di Tabel</h4>
+            
+            <label>Pilih Mode Pengeditan Personel:</label>
+            <select id="mode_personel" onchange="gantiModePersonel(this.value)">
+              <option value="modify">Edit Spesifik (Ganti / Hapus nama tertentu saja)</option>
+              <option value="full">Timpa Total (Buat daftar baru dari awal)</option>
+            </select>
+
+            <!-- Mode Edit Spesifik (Ganti/Hapus) -->
+            <div id="sub_mode_modify">
+              <div id="container-modify"></div>
+              <button type="button" class="btn-info" onclick="tambahBarisModify()">+ Tambah Aksi (Ganti/Hapus)</button>
+            </div>
+
+            <!-- Mode Timpa Total -->
+            <div id="sub_mode_full" style="display:none;">
+              <div id="container-personel"></div>
+              <button type="button" class="btn-info" onclick="tambahBarisPersonel()">+ Tambah Anggota</button>
+            </div>
+
             <hr>
           </div>
 
@@ -248,7 +263,6 @@
             <hr>
           </div>
 
-          <!-- Pejabat Mengetahui / TTD -->
           <h4>Pejabat Penandatangan / Mengetahui</h4>
           <label>Cari Pejabat:</label>
           <div class="autocomplete-container">
@@ -269,6 +283,7 @@
       const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzcne152gfjpKSsQ1KykMwNwfXHsGBPiU0Z3Wz5sf2jrTa1g1ZZQVt3BwucVp7KoUf70w/exec';
       let rowIndex = 0;
       let personelIndex = 0;
+      let modifyIndex = 0;
 
       window.onload = function() {
         fetch(WEB_APP_URL + '?action=getData')
@@ -285,6 +300,7 @@
               
               tambahBarisAset();
               tambahBarisPersonel();
+              tambahBarisModify();
             }
           })
           .catch(err => {
@@ -297,6 +313,58 @@
           document.querySelectorAll('.suggestions-list').forEach(el => el.innerHTML = '');
         }
       });
+
+      function gantiModePersonel(mode) {
+        if (mode === 'modify') {
+          document.getElementById('sub_mode_modify').style.display = 'block';
+          document.getElementById('sub_mode_full').style.display = 'none';
+        } else {
+          document.getElementById('sub_mode_modify').style.display = 'none';
+          document.getElementById('sub_mode_full').style.display = 'block';
+        }
+      }
+
+      function tambahBarisModify() {
+        modifyIndex++;
+        let container = document.getElementById('container-modify');
+        let div = document.createElement('div');
+        div.className = 'item-row';
+        div.id = 'row_mod_' + modifyIndex;
+        div.innerHTML = `
+          <label>Aksi #${modifyIndex}:</label>
+          <select id="aksi_${modifyIndex}" onchange="toggleAksiField(${modifyIndex})">
+            <option value="ganti">Ganti / Ubah Nama di Tabel</option>
+            <option value="hapus">Hapus Nama dari Tabel</option>
+          </select>
+
+          <label>Ketik Nama yang Dicari di Dokumen:</label>
+          <input type="text" id="target_nama_${modifyIndex}" placeholder="Misal: Suardi" autocomplete="off">
+
+          <div id="wrap_pengganti_${modifyIndex}">
+            <label>Cari Anggota Pengganti dari Database:</label>
+            <div class="autocomplete-container">
+              <input type="text" id="cari_mod_${modifyIndex}" placeholder="Ketik nama anggota pengganti..." autocomplete="off" oninput="filterMasterModify(this.value, ${modifyIndex})">
+              <div id="list_mod_${modifyIndex}" class="suggestions-list"></div>
+            </div>
+            <input type="text" id="mod_nama_${modifyIndex}" placeholder="Nama Lengkap Baru">
+            <input type="text" id="mod_pangkat_${modifyIndex}" placeholder="Pangkat / Jabatan Baru">
+          </div>
+
+          ${modifyIndex > 1 ? '<button type="button" class="btn-danger" onclick="hapusBarisModify(' + modifyIndex + ')">Hapus Aksi</button>' : ''}
+        `;
+        container.appendChild(div);
+      }
+
+      function toggleAksiField(id) {
+        let aksi = document.getElementById('aksi_' + id).value;
+        let wrap = document.getElementById('wrap_pengganti_' + id);
+        wrap.style.display = (aksi === 'hapus') ? 'none' : 'block';
+      }
+
+      function hapusBarisModify(id) {
+        let row = document.getElementById('row_mod_' + id);
+        if(row) row.remove();
+      }
 
       function tambahBarisAset() {
         rowIndex++;
@@ -374,7 +442,6 @@
             document.getElementById('form_content').style.display = 'block';
 
             let namaSuratUpper = t[0].toUpperCase();
-            
             let pakaiBarang = namaSuratUpper.includes('BAST') || namaSuratUpper.includes('SERAH');
             let pakaiSPT = namaSuratUpper.includes('TUGAS') || namaSuratUpper.includes('SPT');
             let pakaiPihak = namaSuratUpper.includes('BAST');
@@ -384,6 +451,25 @@
             document.getElementById('section_pihak').style.display = pakaiPihak ? 'block' : 'none';
             document.getElementById('section_tanggal_dikeluarkan').style.display = pakaiSPT ? 'block' : 'none';
 
+            list.innerHTML = '';
+          };
+          list.appendChild(div);
+        });
+      }
+
+      function filterMasterModify(val, index) {
+        let list = document.getElementById('list_mod_' + index);
+        list.innerHTML = '';
+        if (!val) return;
+        
+        let matches = window.dataMasterPersonel.filter(p => p[0] && p[0].toLowerCase().includes(val.toLowerCase()));
+        matches.forEach(p => {
+          let div = document.createElement('div');
+          div.innerHTML = `<b>${p[0]}</b> - ${p[1]}`;
+          div.onclick = function() {
+            document.getElementById('cari_mod_' + index).value = p[0];
+            document.getElementById('mod_nama_' + index).value = p[0] || '';
+            document.getElementById('mod_pangkat_' + index).value = p[1] || '';
             list.innerHTML = '';
           };
           list.appendChild(div);
@@ -475,6 +561,7 @@
 
         alert('Sedang memproses dokumen, mohon tunggu...');
         
+        const modePers = document.getElementById('mode_personel').value;
         const data = {
           template_id: document.getElementById('template_id').value,
           jenis_surat: document.getElementById('jenis_surat').value,
@@ -493,6 +580,7 @@
           pangkat_mengetahui: document.getElementById('pangkat_mengetahui').value,
           nip_mengetahui: document.getElementById('nip_mengetahui').value,
           items: [],
+          mode_personel: modePers,
           personel_items: []
         };
 
@@ -514,14 +602,27 @@
 
         let sectionSpt = document.getElementById('section_spt');
         if (sectionSpt.style.display !== 'none') {
-          let rowsPers = document.querySelectorAll('#container-personel .item-row');
-          rowsPers.forEach(row => {
-            let idMatch = row.id.split('_')[2];
-            data.personel_items.push({
-              nama: document.getElementById('pers_nama_' + idMatch).value,
-              pangkat: document.getElementById('pers_pangkat_' + idMatch).value
+          if (modePers === 'modify') {
+            let rowsMod = document.querySelectorAll('#container-modify .item-row');
+            rowsMod.forEach(row => {
+              let idMatch = row.id.split('_')[2];
+              data.personel_items.push({
+                aksi: document.getElementById('aksi_' + idMatch).value,
+                target_nama: document.getElementById('target_nama_' + idMatch).value,
+                nama: document.getElementById('mod_nama_' + idMatch).value,
+                pangkat: document.getElementById('mod_pangkat_' + idMatch).value
+              });
             });
-          });
+          } else {
+            let rowsPers = document.querySelectorAll('#container-personel .item-row');
+            rowsPers.forEach(row => {
+              let idMatch = row.id.split('_')[2];
+              data.personel_items.push({
+                nama: document.getElementById('pers_nama_' + idMatch).value,
+                pangkat: document.getElementById('pers_pangkat_' + idMatch).value
+              });
+            });
+          }
         }
 
         try {
