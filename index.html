@@ -211,28 +211,13 @@
             <hr>
           </div>
 
-          <!-- Section Khusus SPT (Tabel Personel) -->
+          <!-- Section Khusus SPT (Pengaturan Personel: Ganti atau Hapus) -->
           <div id="section_spt" style="display:none;">
-            <h4>Pengaturan Anggota / Personel di Tabel</h4>
+            <h4>Pengaturan Personel di Dokumen (Ganti / Hapus)</h4>
             
-            <label>Pilih Mode Pengeditan Personel:</label>
-            <select id="mode_personel" onchange="gantiModePersonel(this.value)">
-              <option value="modify">Edit Spesifik (Ganti / Hapus nama tertentu saja)</option>
-              <option value="full">Timpa Total (Buat daftar baru dari awal)</option>
-            </select>
-
-            <!-- Mode Edit Spesifik (Ganti/Hapus) -->
-            <div id="sub_mode_modify">
-              <div id="container-modify"></div>
-              <button type="button" class="btn-info" onclick="tambahBarisModify()">+ Tambah Aksi (Ganti/Hapus)</button>
-            </div>
-
-            <!-- Mode Timpa Total -->
-            <div id="sub_mode_full" style="display:none;">
-              <div id="container-personel"></div>
-              <button type="button" class="btn-info" onclick="tambahBarisPersonel()">+ Tambah Anggota</button>
-            </div>
-
+            <div id="container-modify"></div>
+            <button type="button" class="btn-info" onclick="tambahBarisModify()">+ Tambah Aksi (Ganti/Hapus)</button>
+            
             <hr>
           </div>
 
@@ -282,7 +267,6 @@
     <script>
       const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzcne152gfjpKSsQ1KykMwNwfXHsGBPiU0Z3Wz5sf2jrTa1g1ZZQVt3BwucVp7KoUf70w/exec';
       let rowIndex = 0;
-      let personelIndex = 0;
       let modifyIndex = 0;
 
       window.onload = function() {
@@ -299,7 +283,6 @@
               document.getElementById('docForm').style.display = 'block';
               
               tambahBarisAset();
-              tambahBarisPersonel();
               tambahBarisModify();
             }
           })
@@ -314,16 +297,6 @@
         }
       });
 
-      function gantiModePersonel(mode) {
-        if (mode === 'modify') {
-          document.getElementById('sub_mode_modify').style.display = 'block';
-          document.getElementById('sub_mode_full').style.display = 'none';
-        } else {
-          document.getElementById('sub_mode_modify').style.display = 'none';
-          document.getElementById('sub_mode_full').style.display = 'block';
-        }
-      }
-
       function tambahBarisModify() {
         modifyIndex++;
         let container = document.getElementById('container-modify');
@@ -331,13 +304,13 @@
         div.className = 'item-row';
         div.id = 'row_mod_' + modifyIndex;
         div.innerHTML = `
-          <label>Aksi #${modifyIndex}:</label>
+          <label>Pilih Aksi #${modifyIndex}:</label>
           <select id="aksi_${modifyIndex}" onchange="toggleAksiField(${modifyIndex})">
-            <option value="ganti">Ganti / Ubah Nama di Tabel</option>
+            <option value="ganti">Ganti Nama di Tabel</option>
             <option value="hapus">Hapus Nama dari Tabel</option>
           </select>
 
-          <label>Ketik Nama yang Dicari di Dokumen:</label>
+          <label>Ketik Nama Personel Asli yang Mau Disasar:</label>
           <input type="text" id="target_nama_${modifyIndex}" placeholder="Misal: Suardi" autocomplete="off">
 
           <div id="wrap_pengganti_${modifyIndex}">
@@ -394,30 +367,6 @@
         if(row) row.remove();
       }
 
-      function tambahBarisPersonel() {
-        personelIndex++;
-        let container = document.getElementById('container-personel');
-        let div = document.createElement('div');
-        div.className = 'item-row';
-        div.id = 'row_pers_' + personelIndex;
-        div.innerHTML = `
-          <label>Cari Anggota #${personelIndex}:</label>
-          <div class="autocomplete-container">
-            <input type="text" id="cari_pers_${personelIndex}" placeholder="Ketik nama anggota..." autocomplete="off" oninput="filterMasterPersonel(this.value, ${personelIndex})">
-            <div id="list_pers_${personelIndex}" class="suggestions-list"></div>
-          </div>
-          <input type="text" id="pers_nama_${personelIndex}" placeholder="Nama Lengkap">
-          <input type="text" id="pers_pangkat_${personelIndex}" placeholder="Pangkat / Jabatan">
-          ${personelIndex > 1 ? '<button type="button" class="btn-danger" onclick="hapusBarisPersonel(' + personelIndex + ')">Hapus Anggota</button>' : ''}
-        `;
-        container.appendChild(div);
-      }
-
-      function hapusBarisPersonel(id) {
-        let row = document.getElementById('row_pers_' + id);
-        if(row) row.remove();
-      }
-
       function filterTemplate(val) {
         let list = document.getElementById('list_template');
         list.innerHTML = '';
@@ -470,25 +419,6 @@
             document.getElementById('cari_mod_' + index).value = p[0];
             document.getElementById('mod_nama_' + index).value = p[0] || '';
             document.getElementById('mod_pangkat_' + index).value = p[1] || '';
-            list.innerHTML = '';
-          };
-          list.appendChild(div);
-        });
-      }
-
-      function filterMasterPersonel(val, index) {
-        let list = document.getElementById('list_pers_' + index);
-        list.innerHTML = '';
-        if (!val) return;
-        
-        let matches = window.dataMasterPersonel.filter(p => p[0] && p[0].toLowerCase().includes(val.toLowerCase()));
-        matches.forEach(p => {
-          let div = document.createElement('div');
-          div.innerHTML = `<b>${p[0]}</b> - ${p[1]}`;
-          div.onclick = function() {
-            document.getElementById('cari_pers_' + index).value = p[0];
-            document.getElementById('pers_nama_' + index).value = p[0] || '';
-            document.getElementById('pers_pangkat_' + index).value = p[1] || '';
             list.innerHTML = '';
           };
           list.appendChild(div);
@@ -561,7 +491,6 @@
 
         alert('Sedang memproses dokumen, mohon tunggu...');
         
-        const modePers = document.getElementById('mode_personel').value;
         const data = {
           template_id: document.getElementById('template_id').value,
           jenis_surat: document.getElementById('jenis_surat').value,
@@ -580,7 +509,6 @@
           pangkat_mengetahui: document.getElementById('pangkat_mengetahui').value,
           nip_mengetahui: document.getElementById('nip_mengetahui').value,
           items: [],
-          mode_personel: modePers,
           personel_items: []
         };
 
@@ -602,27 +530,16 @@
 
         let sectionSpt = document.getElementById('section_spt');
         if (sectionSpt.style.display !== 'none') {
-          if (modePers === 'modify') {
-            let rowsMod = document.querySelectorAll('#container-modify .item-row');
-            rowsMod.forEach(row => {
-              let idMatch = row.id.split('_')[2];
-              data.personel_items.push({
-                aksi: document.getElementById('aksi_' + idMatch).value,
-                target_nama: document.getElementById('target_nama_' + idMatch).value,
-                nama: document.getElementById('mod_nama_' + idMatch).value,
-                pangkat: document.getElementById('mod_pangkat_' + idMatch).value
-              });
+          let rowsMod = document.querySelectorAll('#container-modify .item-row');
+          rowsMod.forEach(row => {
+            let idMatch = row.id.split('_')[2];
+            data.personel_items.push({
+              aksi: document.getElementById('aksi_' + idMatch).value,
+              target_nama: document.getElementById('target_nama_' + idMatch).value,
+              nama: document.getElementById('mod_nama_' + idMatch).value,
+              pangkat: document.getElementById('mod_pangkat_' + idMatch).value
             });
-          } else {
-            let rowsPers = document.querySelectorAll('#container-personel .item-row');
-            rowsPers.forEach(row => {
-              let idMatch = row.id.split('_')[2];
-              data.personel_items.push({
-                nama: document.getElementById('pers_nama_' + idMatch).value,
-                pangkat: document.getElementById('pers_pangkat_' + idMatch).value
-              });
-            });
-          }
+          });
         }
 
         try {
