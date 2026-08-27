@@ -3,18 +3,21 @@
   <head>
     <base target="_top">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otomasi Dokumen Satpol PP</title>
     <style>
       :root {
-        --primary: #4f46e5;
-        --primary-hover: #4338ca;
-        --bg-color: #f3f4f6;
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --bg-color: #f1f5f9;
         --card-bg: #ffffff;
-        --text-color: #1f2937;
-        --border-color: #d1d5db;
+        --text-color: #1e293b;
+        --text-muted: #64748b;
+        --border-color: #cbd5e1;
+        --radius: 10px;
       }
 
       body { 
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
         background-color: var(--bg-color); 
         color: var(--text-color); 
         margin: 0; 
@@ -22,102 +25,136 @@
       }
 
       .container { 
-        max-width: 750px; 
-        margin: 30px auto; 
+        max-width: 800px; 
+        margin: 20px auto; 
         background: var(--card-bg); 
-        padding: 30px; 
-        border-radius: 12px; 
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+        padding: 35px; 
+        border-radius: var(--radius); 
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05); 
       }
 
-      h3 { 
-        margin-top: 0; 
-        color: #111827; 
-        font-size: 22px; 
-        border-bottom: 2px solid #e5e7eb; 
-        padding-bottom: 12px; 
-        margin-bottom: 20px; 
+      .header-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border-bottom: 2px solid #f1f5f9;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+      }
+
+      .header-title h3 {
+        margin: 0;
+        color: #0f172a;
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .header-title span {
+        font-size: 13px;
+        background: #e0f2fe;
+        color: #0369a1;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-weight: 600;
       }
 
       h4 { 
-        color: #374151; 
-        font-size: 16px; 
-        margin-top: 25px; 
-        margin-bottom: 10px; 
-        border-left: 4px solid var(--primary);
-        padding-left: 8px;
+        color: #334155; 
+        font-size: 15px; 
+        margin: 25px 0 12px 0; 
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 1px dashed #e2e8f0;
+        padding-bottom: 8px;
       }
 
       label { 
         font-size: 13px; 
-        color: #4b5563; 
+        color: var(--text-muted); 
         font-weight: 600; 
         display: block; 
-        margin-top: 12px; 
-        margin-bottom: 4px; 
+        margin-top: 14px; 
+        margin-bottom: 6px; 
       }
 
       input, select { 
         width: 100%; 
-        padding: 10px 12px; 
-        margin-bottom: 8px; 
+        padding: 11px 14px; 
         border: 1px solid var(--border-color); 
-        border-radius: 6px; 
+        border-radius: 8px; 
         font-size: 14px; 
         box-sizing: border-box; 
-        transition: border-color 0.2s, box-shadow 0.2s;
+        transition: all 0.2s ease;
+        background-color: #f8fafc;
       }
 
       input:focus, select:focus { 
         outline: none; 
         border-color: var(--primary); 
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); 
+        background-color: #ffffff;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); 
+      }
+
+      .row-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
       }
 
       button { 
         background: var(--primary); 
         color: white; 
         border: none; 
-        padding: 10px 18px; 
+        padding: 10px 16px; 
         cursor: pointer; 
         font-size: 14px; 
         font-weight: 600;
-        border-radius: 6px; 
-        transition: background 0.2s; 
+        border-radius: 8px; 
+        transition: background 0.2s, transform 0.1s; 
       }
 
       button:hover { 
         background: var(--primary-hover); 
       }
 
-      .btn-danger { 
-        background: #ef4444; 
-        padding: 6px 12px; 
-        font-size: 12px; 
-        margin-top: 8px; 
-        width: auto; 
+      button:active {
+        transform: scale(0.98);
       }
-      .btn-danger:hover { background: #dc2626; }
+
+      .btn-danger { 
+        background: #fee2e2; 
+        color: #dc2626;
+        padding: 8px 14px; 
+        font-size: 13px; 
+        margin-top: 10px; 
+        width: auto; 
+        border-radius: 6px;
+      }
+      .btn-danger:hover { background: #fecaca; }
 
       .btn-success { 
         background: #10b981; 
         width: 100%; 
-        padding: 12px;
-        font-size: 16px; 
-        margin-top: 25px; 
+        padding: 14px;
+        font-size: 15px; 
+        margin-top: 30px; 
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
       }
       .btn-success:hover { background: #059669; }
 
       .btn-info {
-        background: #0ea5e9;
+        background: #f1f5f9;
+        color: #475569;
+        border: 1px solid #cbd5e1;
         font-size: 13px;
         padding: 8px 14px;
+        margin-top: 10px;
       }
-      .btn-info:hover { background: #0284c7; }
+      .btn-info:hover { background: #e2e8f0; color: #1e293b; }
 
       .autocomplete-container { 
         position: relative; 
-        margin-bottom: 5px; 
       }
 
       .suggestions-list { 
@@ -127,17 +164,17 @@
         top: 100%; 
         left: 0; 
         right: 0; 
-        max-height: 180px; 
+        max-height: 200px; 
         overflow-y: auto; 
         background-color: #fff; 
-        border-radius: 0 0 6px 6px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
       }
 
       .suggestions-list div { 
-        padding: 10px 12px; 
+        padding: 11px 14px; 
         cursor: pointer; 
-        border-bottom: 1px solid #f3f4f6; 
+        border-bottom: 1px solid #f1f5f9; 
         font-size: 13px; 
       }
 
@@ -149,40 +186,44 @@
 
       .loading-box { 
         text-align: center;
-        font-style: italic; 
         color: var(--primary); 
-        margin: 40px 0; 
+        margin: 50px 0; 
         font-weight: 600; 
-        font-size: 16px;
+        font-size: 15px;
       }
 
       .item-row { 
-        background: #f9fafb; 
-        padding: 18px; 
-        border: 1px solid #e5e7eb; 
-        margin-bottom: 12px; 
+        background: #f8fafc; 
+        padding: 20px; 
+        border: 1px solid #e2e8f0; 
+        margin-bottom: 15px; 
         border-radius: 8px; 
       }
 
-      hr { 
-        margin: 25px 0; 
-        border: 0; 
-        border-top: 1px solid #e5e7eb; 
+      .section-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
       }
     </style>
   </head>
   <body>
     
     <div class="container">
-      <h3>Form Otomasi Dokumen Satpol PP</h3>
+      <div class="header-title">
+        <h3>Otomasi Dokumen Surat</h3>
+        <span>Satpol PP Kota Serang</span>
+      </div>
       
-      <div id="loadingStatus" class="loading-box">⏳ Sedang memuat database, mohon tunggu sebentar...</div>
+      <div id="loadingStatus" class="loading-box">⏳ Memuat database sistem, mohon tunggu sebentar...</div>
 
       <form id="docForm" onsubmit="handleFormSubmit(event)" style="display:none;">
         
         <label>Pilih Jenis Template Surat:</label>
         <div class="autocomplete-container">
-          <input type="text" id="cari_template" placeholder="Ketik nama template (BAST / SPT)..." autocomplete="off" oninput="filterTemplate(this.value)">
+          <input type="text" id="cari_template" placeholder="🔍 Ketik nama template (BAST / SPT)..." autocomplete="off" oninput="filterTemplate(this.value)">
           <div id="list_template" class="suggestions-list"></div>
         </div>
         <input type="hidden" id="template_id" name="template_id">
@@ -190,75 +231,85 @@
 
         <div id="form_content" style="display:none;">
           
-          <label>Nomor Surat:</label>
-          <input type="text" name="nomor_surat" id="nomor_surat" placeholder="Masukkan Nomor Surat" autocomplete="off">
-          
-          <label>Tanggal Penugasan (Isi Surat / Hari & Tanggal):</label>
-          <input type="text" name="hari_tanggal" id="hari_tanggal" placeholder="Contoh: 01 s/d 31 Agustus 2026" autocomplete="off">
+          <div class="row-grid">
+            <div>
+              <label>Nomor Surat:</label>
+              <input type="text" name="nomor_surat" id="nomor_surat" placeholder="Contoh: 300.1.2.2/..." autocomplete="off">
+            </div>
+            <div>
+              <label>Tanggal Penugasan / Kegiatan:</label>
+              <input type="text" name="hari_tanggal" id="hari_tanggal" placeholder="Contoh: 01 s/d 31 Agustus 2026" autocomplete="off">
+            </div>
+          </div>
 
           <div id="section_tanggal_dikeluarkan" style="display:none;">
-            <label>Tanggal Dikeluarkan / Tanggal TTD Surat:</label>
+            <label>Tanggal Dikeluarkan Surat (TTD):</label>
             <input type="text" name="tanggal_dikeluarkan" id="tanggal_dikeluarkan" placeholder="Contoh: 31 Juli 2026" autocomplete="off">
           </div>
           
-          <hr>
-
           <!-- Section Khusus BAST (Tabel Barang) -->
-          <div id="section_barang" style="display:none;">
-            <h4>Daftar Barang / Aset Diserahterimakan</h4>
+          <div id="section_barang" class="section-card" style="display:none;">
+            <h4>📦 Daftar Barang / Aset Diserahterimakan</h4>
             <div id="container-aset"></div>
-            <button type="button" class="btn-info" onclick="tambahBarisAset()">+ Tambah Barang</button>
-            <hr>
+            <button type="button" class="btn-info" onclick="tambahBarisAset()">+ Tambah Baris Barang</button>
           </div>
 
-          <!-- Section Khusus SPT (Pengaturan Personel: Ganti atau Hapus via Autocomplete) -->
-          <div id="section_spt" style="display:none;">
-            <h4>Pengaturan Personel di Dokumen (Ganti / Hapus)</h4>
-            
+          <!-- Section Khusus SPT (Pengaturan Personel: Ganti atau Hapus) -->
+          <div id="section_spt" class="section-card" style="display:none;">
+            <h4>👥 Pengaturan Personel (Ganti / Hapus)</h4>
             <div id="container-modify"></div>
-            <button type="button" class="btn-info" onclick="tambahBarisModify()">+ Tambah Aksi (Ganti/Hapus)</button>
-            
-            <hr>
+            <button type="button" class="btn-info" onclick="tambahBarisModify()">+ Tambah Aksi Personel</button>
           </div>
 
           <!-- Section Pihak 1 & Pihak 2 -->
-          <div id="section_pihak" style="display:none;">
-            <h4>Pihak - Pihak Terkait</h4>
+          <div id="section_pihak" class="section-card" style="display:none;">
+            <h4>🤝 Pihak - Pihak Terkait</h4>
             
             <label>Cari Pihak 1 (Yang Menyerahkan):</label>
             <div class="autocomplete-container">
-              <input type="text" id="cari_p1" placeholder="Ketik nama Pihak 1..." autocomplete="off" oninput="filterPegawai(this.value, 'p1')">
+              <input type="text" id="cari_p1" placeholder="🔍 Ketik nama Pihak 1..." autocomplete="off" oninput="filterPegawai(this.value, 'p1')">
               <div id="list_p1" class="suggestions-list"></div>
             </div>
-            <input type="text" name="nama_p1" id="nama_p1" placeholder="Nama Pihak 1">
-            <input type="text" name="pangkat_p1" id="pangkat_p1" placeholder="Pangkat Pihak 1">
-            <input type="text" name="nip_p1" id="nip_p1" placeholder="NIP Pihak 1">
-            <input type="text" name="jabatan_p1" id="jabatan_p1" placeholder="Jabatan Pihak 1">
+            <div class="row-grid" style="margin-top: 8px;">
+              <input type="text" name="nama_p1" id="nama_p1" placeholder="Nama Pihak 1">
+              <input type="text" name="pangkat_p1" id="pangkat_p1" placeholder="Pangkat Pihak 1">
+            </div>
+            <div class="row-grid" style="margin-top: 8px;">
+              <input type="text" name="nip_p1" id="nip_p1" placeholder="NIP Pihak 1">
+              <input type="text" name="jabatan_p1" id="jabatan_p1" placeholder="Jabatan Pihak 1">
+            </div>
 
             <label style="margin-top: 15px;">Cari Pihak 2 (Yang Menerima):</label>
             <div class="autocomplete-container">
-              <input type="text" id="cari_p2" placeholder="Ketik nama Pihak 2..." autocomplete="off" oninput="filterPegawai(this.value, 'p2')">
+              <input type="text" id="cari_p2" placeholder="🔍 Ketik nama Pihak 2..." autocomplete="off" oninput="filterPegawai(this.value, 'p2')">
               <div id="list_p2" class="suggestions-list"></div>
             </div>
-            <input type="text" name="nama_p2" id="nama_p2" placeholder="Nama Pihak 2">
-            <input type="text" name="pangkat_p2" id="pangkat_p2" placeholder="Pangkat Pihak 2">
-            <input type="text" name="nip_p2" id="nip_p2" placeholder="NIP Pihak 2">
-            <input type="text" name="jabatan_p2" id="jabatan_p2" placeholder="Jabatan Pihak 2">
-            
-            <hr>
+            <div class="row-grid" style="margin-top: 8px;">
+              <input type="text" name="nama_p2" id="nama_p2" placeholder="Nama Pihak 2">
+              <input type="text" name="pangkat_p2" id="pangkat_p2" placeholder="Pangkat Pihak 2">
+            </div>
+            <div class="row-grid" style="margin-top: 8px;">
+              <input type="text" name="nip_p2" id="nip_p2" placeholder="NIP Pihak 2">
+              <input type="text" name="jabatan_p2" id="jabatan_p2" placeholder="Jabatan Pihak 2">
+            </div>
           </div>
 
-          <h4>Pejabat Penandatangan / Mengetahui</h4>
-          <label>Cari Pejabat:</label>
-          <div class="autocomplete-container">
-            <input type="text" id="cari_mengetahui" placeholder="Ketik nama pejabat..." autocomplete="off" oninput="filterPegawai(this.value, 'mengetahui')">
-            <div id="list_mengetahui" class="suggestions-list"></div>
+          <!-- Section Pejabat Penandatangan -->
+          <div class="section-card">
+            <h4>✍️ Pejabat Penandatangan / Mengetahui</h4>
+            <label>Cari Pejabat:</label>
+            <div class="autocomplete-container">
+              <input type="text" id="cari_mengetahui" placeholder="🔍 Ketik nama pejabat..." autocomplete="off" oninput="filterPegawai(this.value, 'mengetahui')">
+              <div id="list_mengetahui" class="suggestions-list"></div>
+            </div>
+            <div class="row-grid" style="margin-top: 8px;">
+              <input type="text" name="nama_mengetahui" id="nama_mengetahui" placeholder="Nama Pejabat">
+              <input type="text" name="pangkat_mengetahui" id="pangkat_mengetahui" placeholder="Pangkat / Golongan">
+            </div>
+            <input type="text" name="nip_mengetahui" id="nip_mengetahui" placeholder="NIP Pejabat" style="margin-top: 8px;">
           </div>
-          <input type="text" name="nama_mengetahui" id="nama_mengetahui" placeholder="Nama Pejabat">
-          <input type="text" name="pangkat_mengetahui" id="pangkat_mengetahui" placeholder="Pangkat / Golongan">
-          <input type="text" name="nip_mengetahui" id="nip_mengetahui" placeholder="NIP Pejabat">
           
-          <button type="submit" class="btn-success">Buat Dokumen Surat</button>
+          <button type="submit" class="btn-success">🚀 Buat Dokumen Surat Sekarang</button>
         </div>
 
       </form>
@@ -304,30 +355,37 @@
         div.className = 'item-row';
         div.id = 'row_mod_' + modifyIndex;
         div.innerHTML = `
-          <label>Pilih Aksi #${modifyIndex}:</label>
-          <select id="aksi_${modifyIndex}" onchange="toggleAksiField(${modifyIndex})">
-            <option value="ganti">Ganti Nama di Tabel</option>
-            <option value="hapus">Hapus Nama dari Tabel</option>
-          </select>
-
-          <label>Cari Nama Personel Asli yang Mau Disasar:</label>
-          <div class="autocomplete-container">
-            <input type="text" id="cari_target_${modifyIndex}" placeholder="Ketik nama personel yang mau diganti/dihapus..." autocomplete="off" oninput="filterTargetModify(this.value, ${modifyIndex})">
-            <div id="list_target_${modifyIndex}" class="suggestions-list"></div>
+          <div class="row-grid">
+            <div>
+              <label>Pilih Aksi #${modifyIndex}:</label>
+              <select id="aksi_${modifyIndex}" onchange="toggleAksiField(${modifyIndex})">
+                <option value="ganti">Ganti Nama di Tabel</option>
+                <option value="hapus">Hapus Nama dari Tabel</option>
+              </select>
+            </div>
+            <div>
+              <label>Cari Personel Asli yang Disasar:</label>
+              <div class="autocomplete-container">
+                <input type="text" id="cari_target_${modifyIndex}" placeholder="🔍 Ketik nama asli..." autocomplete="off" oninput="filterTargetModify(this.value, ${modifyIndex})">
+                <div id="list_target_${modifyIndex}" class="suggestions-list"></div>
+              </div>
+              <input type="hidden" id="target_nama_${modifyIndex}">
+            </div>
           </div>
-          <input type="hidden" id="target_nama_${modifyIndex}">
 
-          <div id="wrap_pengganti_${modifyIndex}">
-            <label>Cari Anggota Pengganti dari Database:</label>
+          <div id="wrap_pengganti_${modifyIndex}" style="margin-top: 10px;">
+            <label>Cari Anggota Pengganti:</label>
             <div class="autocomplete-container">
-              <input type="text" id="cari_mod_${modifyIndex}" placeholder="Ketik nama anggota pengganti..." autocomplete="off" oninput="filterMasterModify(this.value, ${modifyIndex})">
+              <input type="text" id="cari_mod_${modifyIndex}" placeholder="🔍 Ketik nama anggota pengganti..." autocomplete="off" oninput="filterMasterModify(this.value, ${modifyIndex})">
               <div id="list_mod_${modifyIndex}" class="suggestions-list"></div>
             </div>
-            <input type="text" id="mod_nama_${modifyIndex}" placeholder="Nama Lengkap Baru">
-            <input type="text" id="mod_pangkat_${modifyIndex}" placeholder="Pangkat / Jabatan Baru">
+            <div class="row-grid" style="margin-top: 8px;">
+              <input type="text" id="mod_nama_${modifyIndex}" placeholder="Nama Lengkap Baru">
+              <input type="text" id="mod_pangkat_${modifyIndex}" placeholder="Pangkat / Jabatan Baru">
+            </div>
           </div>
 
-          ${modifyIndex > 1 ? '<button type="button" class="btn-danger" onclick="hapusBarisModify(' + modifyIndex + ')">Hapus Aksi</button>' : ''}
+          ${modifyIndex > 1 ? '<button type="button" class="btn-danger" onclick="hapusBarisModify(' + modifyIndex + ')">Hapus Aksi Ini</button>' : ''}
         `;
         container.appendChild(div);
       }
@@ -348,7 +406,6 @@
         list.innerHTML = '';
         if (!val) return;
         
-        // Menggunakan master personel atau data pegawai untuk pilihan target
         let matches = window.dataMasterPersonel.filter(p => p[0] && p[0].toLowerCase().includes(val.toLowerCase()));
         matches.forEach(p => {
           let div = document.createElement('div');
@@ -369,18 +426,24 @@
         div.className = 'item-row';
         div.id = 'row_aset_' + rowIndex;
         div.innerHTML = `
-          <label>Cari Barang #${rowIndex}:</label>
+          <label>Cari Barang / Aset #${rowIndex}:</label>
           <div class="autocomplete-container">
-            <input type="text" id="cari_aset_${rowIndex}" placeholder="Ketik nama barang/merk..." autocomplete="off" oninput="filterAset(this.value, ${rowIndex})">
+            <input type="text" id="cari_aset_${rowIndex}" placeholder="🔍 Ketik nama barang/merk..." autocomplete="off" oninput="filterAset(this.value, ${rowIndex})">
             <div id="list_aset_${rowIndex}" class="suggestions-list"></div>
           </div>
-          <input type="text" id="nama_barang_${rowIndex}" placeholder="Nama Barang">
-          <input type="text" id="merk_type_${rowIndex}" placeholder="Merk/Type">
-          <input type="text" id="no_seri_${rowIndex}" placeholder="No. Polisi / No. Seri">
-          <input type="text" id="tahun_perolehan_${rowIndex}" placeholder="Tahun Perolehan">
-          <input type="text" id="jumlah_${rowIndex}" placeholder="Jumlah" value="1">
-          <input type="text" id="keterangan_${rowIndex}" placeholder="Keterangan">
-          ${rowIndex > 1 ? '<button type="button" class="btn-danger" onclick="hapusBarisAset(' + rowIndex + ')">Hapus Barang</button>' : ''}
+          <div class="row-grid" style="margin-top: 8px;">
+            <input type="text" id="nama_barang_${rowIndex}" placeholder="Nama Barang">
+            <input type="text" id="merk_type_${rowIndex}" placeholder="Merk/Type">
+          </div>
+          <div class="row-grid" style="margin-top: 8px;">
+            <input type="text" id="no_seri_${rowIndex}" placeholder="No. Polisi / No. Seri">
+            <input type="text" id="tahun_perolehan_${rowIndex}" placeholder="Tahun Perolehan">
+          </div>
+          <div class="row-grid" style="margin-top: 8px;">
+            <input type="text" id="jumlah_${rowIndex}" placeholder="Jumlah" value="1">
+            <input type="text" id="keterangan_${rowIndex}" placeholder="Keterangan">
+          </div>
+          ${rowIndex > 1 ? '<button type="button" class="btn-danger" onclick="hapusBarisAset(' + rowIndex + ')">Hapus Barang Ini</button>' : ''}
         `;
         container.appendChild(div);
       }
