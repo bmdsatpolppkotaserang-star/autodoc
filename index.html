@@ -236,7 +236,7 @@
               <label>Nomor Surat:</label>
               <input type="text" name="nomor_surat" id="nomor_surat" placeholder="Contoh: 300.1.2.2/..." autocomplete="off">
             </div>
-            <div id="container-hari-tanggal"> <!-- Ditambahkan ID ini -->
+            <div id="container-hari-tanggal"> 
               <label>Tanggal Penugasan / Kegiatan:</label>
               <input type="text" name="hari_tanggal" id="hari_tanggal" placeholder="Contoh: 01 s/d 31 Agustus 2026" autocomplete="off">
             </div>
@@ -348,6 +348,128 @@
         }
       });
 
+      function filterTemplate(val) {
+        let list = document.getElementById('list_template');
+        list.innerHTML = '';
+        if (!val) {
+          document.getElementById('form_content').style.display = 'none';
+          return;
+        }
+        
+        let matches = window.dataTemplates.filter(t => t[0] != null && String(t[0]).toLowerCase().includes(val.toLowerCase()));
+        matches.forEach(t => {
+          let div = document.createElement('div');
+          div.innerHTML = `<b>${t[0]}</b>`;
+          div.onclick = function() {
+            document.getElementById('cari_template').value = t[0];
+            document.getElementById('jenis_surat').value = t[0];
+            document.getElementById('template_id').value = t[1]; 
+            
+            if (t[2]) {
+              document.getElementById('nomor_surat').value = t[2];
+            }
+
+            document.getElementById('form_content').style.display = 'block';
+            let namaSuratUpper = String(t[0]).toUpperCase();
+            
+            document.getElementById('container-no-surat').style.display = 'none';
+            document.getElementById('container-hari-tanggal').style.display = 'none'; 
+            document.getElementById('section_tanggal_dikeluarkan').style.display = 'none';
+            document.getElementById('section_barang').style.display = 'none';
+            document.getElementById('section_spt').style.display = 'none';
+            document.getElementById('section_pihak').style.display = 'none';
+            document.getElementById('section_mengetahui').style.display = 'none';
+
+            if (namaSuratUpper.includes('BAST') || namaSuratUpper.includes('SERAH')) {
+                document.getElementById('container-no-surat').style.display = 'block';
+                document.getElementById('container-hari-tanggal').style.display = 'block';
+                document.getElementById('section_barang').style.display = 'block';
+                document.getElementById('section_pihak').style.display = 'block';
+                document.getElementById('section_mengetahui').style.display = 'block';
+            } 
+            else if (namaSuratUpper.includes('JADWAL')) {
+                document.getElementById('section_tanggal_dikeluarkan').style.display = 'block'; 
+                document.getElementById('section_spt').style.display = 'block';
+                document.getElementById('section_mengetahui').style.display = 'block';
+            } 
+            else if (namaSuratUpper.includes('LAMPIRAN')) {
+                document.getElementById('container-no-surat').style.display = 'block';
+                document.getElementById('section_tanggal_dikeluarkan').style.display = 'block';
+                document.getElementById('section_spt').style.display = 'block';
+            } 
+            else if (namaSuratUpper.includes('TUGAS') || namaSuratUpper.includes('SPT')) {
+                document.getElementById('container-no-surat').style.display = 'block';
+                document.getElementById('container-hari-tanggal').style.display = 'block';
+                document.getElementById('section_tanggal_dikeluarkan').style.display = 'block';
+                document.getElementById('section_spt').style.display = 'block';
+                document.getElementById('section_mengetahui').style.display = 'block';
+            }
+            list.innerHTML = '';
+          };
+          list.appendChild(div);
+        });
+      }
+
+      function tambahBarisAset() {
+        rowIndex++;
+        let container = document.getElementById('container-aset');
+        let div = document.createElement('div');
+        div.className = 'item-row';
+        div.id = 'row_aset_' + rowIndex;
+        div.innerHTML = `
+          <label>Cari Barang / Aset #${rowIndex}:</label>
+          <div class="autocomplete-container">
+            <input type="text" id="cari_aset_${rowIndex}" placeholder="🔍 Ketik nama barang/merk..." autocomplete="off" oninput="filterAset(this.value, ${rowIndex})">
+            <div id="list_aset_${rowIndex}" class="suggestions-list"></div>
+          </div>
+          <div class="row-grid" style="margin-top: 8px;">
+            <input type="text" id="nama_barang_${rowIndex}" placeholder="Nama Barang">
+            <input type="text" id="merk_type_${rowIndex}" placeholder="Merk/Type">
+          </div>
+          <div class="row-grid" style="margin-top: 8px;">
+            <input type="text" id="no_seri_${rowIndex}" placeholder="No. Polisi / No. Seri">
+            <input type="text" id="tahun_perolehan_${rowIndex}" placeholder="Tahun Perolehan">
+          </div>
+          <div class="row-grid" style="margin-top: 8px;">
+            <input type="text" id="jumlah_${rowIndex}" placeholder="Jumlah" value="1">
+            <input type="text" id="keterangan_${rowIndex}" placeholder="Keterangan">
+          </div>
+          ${rowIndex > 1 ? '<button type="button" class="btn-danger" onclick="hapusBarisAset(' + rowIndex + ')">Hapus Barang Ini</button>' : ''}
+        `;
+        container.appendChild(div);
+      }
+
+      function hapusBarisAset(id) {
+        let row = document.getElementById('row_aset_' + id);
+        if(row) row.remove();
+      }
+
+      // PERBAIKAN: Menambahkan String() agar tidak error kalau ada angka di database barang
+      function filterAset(val, index) {
+        let list = document.getElementById('list_aset_' + index);
+        list.innerHTML = '';
+        if (!val) return;
+        
+        let matches = window.dataAset.filter(a => 
+          (a[0] != null && String(a[0]).toLowerCase().includes(val.toLowerCase())) || 
+          (a[1] != null && String(a[1]).toLowerCase().includes(val.toLowerCase()))
+        );
+
+        matches.forEach(a => {
+          let div = document.createElement('div');
+          div.innerHTML = `<b>${a[0]}</b> - ${a[1]}`;
+          div.onclick = function() {
+            document.getElementById('cari_aset_' + index).value = a[0];
+            document.getElementById('nama_barang_' + index).value = a[0] || '';
+            document.getElementById('merk_type_' + index).value = a[1] || '';
+            document.getElementById('no_seri_' + index).value = [a[2], a[3], a[4]].filter(Boolean).join(' | ');
+            document.getElementById('tahun_perolehan_' + index).value = a[5] || '';
+            list.innerHTML = '';
+          };
+          list.appendChild(div);
+        });
+      }
+
       function tambahBarisModify() {
         modifyIndex++;
         let container = document.getElementById('container-modify');
@@ -401,12 +523,13 @@
         if(row) row.remove();
       }
 
+      // PERBAIKAN: Menambahkan String() 
       function filterTargetModify(val, index) {
         let list = document.getElementById('list_target_' + index);
         list.innerHTML = '';
         if (!val) return;
         
-        let matches = window.dataMasterPersonel.filter(p => p[0] && p[0].toLowerCase().includes(val.toLowerCase()));
+        let matches = window.dataMasterPersonel.filter(p => p[0] != null && String(p[0]).toLowerCase().includes(val.toLowerCase()));
         matches.forEach(p => {
           let div = document.createElement('div');
           div.innerHTML = `<b>${p[0]}</b> - ${p[1]}`;
@@ -419,114 +542,13 @@
         });
       }
 
-      function tambahBarisAset() {
-        rowIndex++;
-        let container = document.getElementById('container-aset');
-        let div = document.createElement('div');
-        div.className = 'item-row';
-        div.id = 'row_aset_' + rowIndex;
-        div.innerHTML = `
-          <label>Cari Barang / Aset #${rowIndex}:</label>
-          <div class="autocomplete-container">
-            <input type="text" id="cari_aset_${rowIndex}" placeholder="🔍 Ketik nama barang/merk..." autocomplete="off" oninput="filterAset(this.value, ${rowIndex})">
-            <div id="list_aset_${rowIndex}" class="suggestions-list"></div>
-          </div>
-          <div class="row-grid" style="margin-top: 8px;">
-            <input type="text" id="nama_barang_${rowIndex}" placeholder="Nama Barang">
-            <input type="text" id="merk_type_${rowIndex}" placeholder="Merk/Type">
-          </div>
-          <div class="row-grid" style="margin-top: 8px;">
-            <input type="text" id="no_seri_${rowIndex}" placeholder="No. Polisi / No. Seri">
-            <input type="text" id="tahun_perolehan_${rowIndex}" placeholder="Tahun Perolehan">
-          </div>
-          <div class="row-grid" style="margin-top: 8px;">
-            <input type="text" id="jumlah_${rowIndex}" placeholder="Jumlah" value="1">
-            <input type="text" id="keterangan_${rowIndex}" placeholder="Keterangan">
-          </div>
-          ${rowIndex > 1 ? '<button type="button" class="btn-danger" onclick="hapusBarisAset(' + rowIndex + ')">Hapus Barang Ini</button>' : ''}
-        `;
-        container.appendChild(div);
-      }
-
-      function hapusBarisAset(id) {
-        let row = document.getElementById('row_aset_' + id);
-        if(row) row.remove();
-      }
-
-      function filterTemplate(val) {
-        let list = document.getElementById('list_template');
-        list.innerHTML = '';
-        if (!val) {
-          document.getElementById('form_content').style.display = 'none';
-          return;
-        }
-        
-        let matches = window.dataTemplates.filter(t => t[0].toLowerCase().includes(val.toLowerCase()));
-        matches.forEach(t => {
-          let div = document.createElement('div');
-          div.innerHTML = `<b>${t[0]}</b>`;
-          div.onclick = function() {
-            document.getElementById('cari_template').value = t[0];
-            document.getElementById('jenis_surat').value = t[0];
-            document.getElementById('template_id').value = t[1]; 
-            
-            if (t[2]) {
-              document.getElementById('nomor_surat').value = t[2];
-            }
-
-            document.getElementById('form_content').style.display = 'block';
-
-            let namaSuratUpper = t[0].toUpperCase();
-            
-            // 1. Reset semua bagian form (Sembunyikan)
-            document.getElementById('container-no-surat').style.display = 'none';
-            document.getElementById('container-hari-tanggal').style.display = 'none'; // Reset Tanggal Penugasan
-            document.getElementById('section_tanggal_dikeluarkan').style.display = 'none';
-            document.getElementById('section_barang').style.display = 'none';
-            document.getElementById('section_spt').style.display = 'none';
-            document.getElementById('section_pihak').style.display = 'none';
-            document.getElementById('section_mengetahui').style.display = 'none';
-
-            // 2. Tampilkan bagian form sesuai jenis template
-            if (namaSuratUpper.includes('BAST') || namaSuratUpper.includes('SERAH')) {
-                document.getElementById('container-no-surat').style.display = 'block';
-                document.getElementById('container-hari-tanggal').style.display = 'block';
-                document.getElementById('section_barang').style.display = 'block';
-                document.getElementById('section_pihak').style.display = 'block';
-                document.getElementById('section_mengetahui').style.display = 'block';
-            } 
-            else if (namaSuratUpper.includes('JADWAL')) {
-                // container-hari-tanggal tetap hidden
-                document.getElementById('section_tanggal_dikeluarkan').style.display = 'block'; 
-                document.getElementById('section_spt').style.display = 'block';
-                document.getElementById('section_mengetahui').style.display = 'block';
-            } 
-            else if (namaSuratUpper.includes('LAMPIRAN')) {
-                document.getElementById('container-no-surat').style.display = 'block';
-                // container-hari-tanggal tetap hidden
-                document.getElementById('section_tanggal_dikeluarkan').style.display = 'block';
-                document.getElementById('section_spt').style.display = 'block';
-            } 
-            else if (namaSuratUpper.includes('TUGAS') || namaSuratUpper.includes('SPT')) {
-                document.getElementById('container-no-surat').style.display = 'block';
-                document.getElementById('container-hari-tanggal').style.display = 'block';
-                document.getElementById('section_tanggal_dikeluarkan').style.display = 'block';
-                document.getElementById('section_spt').style.display = 'block';
-                document.getElementById('section_mengetahui').style.display = 'block';
-            }
-
-            list.innerHTML = '';
-          };
-          list.appendChild(div);
-        });
-      }
-
+      // PERBAIKAN: Menambahkan String()
       function filterMasterModify(val, index) {
         let list = document.getElementById('list_mod_' + index);
         list.innerHTML = '';
         if (!val) return;
         
-        let matches = window.dataMasterPersonel.filter(p => p[0] && p[0].toLowerCase().includes(val.toLowerCase()));
+        let matches = window.dataMasterPersonel.filter(p => p[0] != null && String(p[0]).toLowerCase().includes(val.toLowerCase()));
         matches.forEach(p => {
           let div = document.createElement('div');
           div.innerHTML = `<b>${p[0]}</b> - ${p[1]}`;
@@ -540,11 +562,15 @@
         });
       }
 
+      // PERBAIKAN: Menambahkan String()
       function filterPegawai(val, target) {
         let list = document.getElementById('list_' + target);
         list.innerHTML = '';
         if (!val) return;
-        let matches = window.dataPegawai.filter(p => p[0].toLowerCase().includes(val.toLowerCase()) || p[1].toLowerCase().includes(val.toLowerCase()));
+        let matches = window.dataPegawai.filter(p => 
+          (p[0] != null && String(p[0]).toLowerCase().includes(val.toLowerCase())) || 
+          (p[1] != null && String(p[1]).toLowerCase().includes(val.toLowerCase()))
+        );
         matches.forEach(p => {
           let div = document.createElement('div');
           div.innerHTML = `<b>${p[0]}</b> (${p[1]})`;
