@@ -3,11 +3,11 @@
   <head>
     <base target="_top">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SI-ASEP | Satpol PP Kota Serang</title>
+    <title>Otomasi Dokumen | Satpol PP Kota Serang</title>
     <style>
       :root {
-        --praja-blue: #0f172a; /* Biru Gelap Satpol PP */
-        --praja-gold: #d97706; /* Emas Satpol PP */
+        --praja-blue: #0f172a; 
+        --praja-gold: #d97706; 
         --praja-gold-hover: #b45309;
         --bg-color: #f8fafc;
         --card-bg: #ffffff;
@@ -42,7 +42,6 @@
         margin-bottom: 30px;
       }
 
-      /* Lingkaran inisial logo (Bisa diganti image logo asli nantinya) */
       .logo-circle {
         background-color: var(--praja-blue);
         color: var(--praja-gold);
@@ -168,7 +167,6 @@
       .item-row { background: #f8fafc; padding: 25px; border: 1px solid #e2e8f0; margin-bottom: 15px; border-radius: 8px; }
       .section-card { background: #ffffff; border: 1px solid #e2e8f0; padding: 25px; border-radius: 8px; margin-top: 25px; }
 
-      /* Styling untuk Layar Sukses */
       .success-screen { text-align: center; display: none; padding: 20px; }
       .success-icon { font-size: 60px; margin-bottom: 15px; }
       .success-screen h2 { color: var(--praja-blue); margin-bottom: 10px; }
@@ -181,14 +179,13 @@
       <div class="header-section">
         <div class="logo-circle">PP</div>
         <div class="header-title">
-          <h3>Sistem SI-ASEP</h3>
+          <h3>Otomasi Dokumen</h3>
           <span>Satuan Polisi Pamong Praja Kota Serang</span>
         </div>
       </div>
       
       <div id="loadingStatus" class="loading-box">⏳ Menghubungkan ke Database Master...</div>
 
-      <!-- LAYAR SUKSES & TOMBOL WA -->
       <div id="success-screen" class="success-screen">
         <div class="success-icon">🎉</div>
         <h2>Dokumen Berhasil Dibuat!</h2>
@@ -562,17 +559,14 @@
           const response = await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(data) });
           const result = await response.json();
           if(result.status === 'success') {
-            // Sembunyikan form, Tampilkan halaman sukses
             document.getElementById('docForm').style.display = 'none';
             document.getElementById('success-screen').style.display = 'block';
             
-            // Konfigurasi Link Download
             document.getElementById('btn-download').onclick = () => window.open(result.url, '_blank');
             
-            // Konfigurasi Pesan WhatsApp
             let jSurat = data.jenis_surat;
             let nSurat = data.nomor_surat ? ` (Nomor: ${data.nomor_surat})` : '';
-            let teksWA = `Izin melaporkan Komandan, dokumen *${jSurat}*${nSurat} telah selesai dibuat melalui sistem SI-ASEP.\n\nMohon berkenan klik tautan berikut untuk mengunduh dokumen:\n${result.url}\n\nTerima kasih.`;
+            let teksWA = `Izin melaporkan Komandan, dokumen *${jSurat}*${nSurat} telah selesai dibuat melalui sistem.\n\nMohon berkenan klik tautan berikut untuk mengunduh dokumen:\n${result.url}\n\nTerima kasih.`;
             
             let linkWA = `https://api.whatsapp.com/send?text=${encodeURIComponent(teksWA)}`;
             document.getElementById('btn-wa').onclick = () => window.open(linkWA, '_blank');
