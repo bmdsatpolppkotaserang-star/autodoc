@@ -371,7 +371,10 @@
 
             document.getElementById('form_content').style.display = 'block';
             let namaSuratUpper = String(t[0]).toUpperCase();
-            let labelHariTanggal = document.getElementById('label_hari_tanggal'); // Element Label
+            
+            // Ambil elemen Label dan Input untuk Hari/Tanggal
+            let labelHariTanggal = document.getElementById('label_hari_tanggal'); 
+            let inputHariTanggal = document.getElementById('hari_tanggal');
             
             document.getElementById('container-no-surat').style.display = 'none';
             document.getElementById('container-hari-tanggal').style.display = 'none'; 
@@ -382,7 +385,8 @@
             document.getElementById('section_mengetahui').style.display = 'none';
 
             if (namaSuratUpper.includes('BAST') || namaSuratUpper.includes('SERAH')) {
-                labelHariTanggal.innerText = 'Tanggal Serah Terima:'; // Ganti label untuk BAST
+                labelHariTanggal.innerText = 'Tanggal Serah Terima:'; 
+                inputHariTanggal.placeholder = 'Contoh: Senin Tiga Januari Tahun...'; // Ubah placeholder BAST
                 document.getElementById('container-no-surat').style.display = 'block';
                 document.getElementById('container-hari-tanggal').style.display = 'block';
                 document.getElementById('section_barang').style.display = 'block';
@@ -400,7 +404,8 @@
                 document.getElementById('section_spt').style.display = 'block';
             } 
             else if (namaSuratUpper.includes('TUGAS') || namaSuratUpper.includes('SPT')) {
-                labelHariTanggal.innerText = 'Tanggal Penugasan / Kegiatan:'; // Kembali normal untuk SPT
+                labelHariTanggal.innerText = 'Tanggal Penugasan / Kegiatan:'; 
+                inputHariTanggal.placeholder = 'Contoh: 01 s/d 31 Agustus 2026'; // Kembali ke placeholder SPT
                 document.getElementById('container-no-surat').style.display = 'block';
                 document.getElementById('container-hari-tanggal').style.display = 'block';
                 document.getElementById('section_tanggal_dikeluarkan').style.display = 'block';
