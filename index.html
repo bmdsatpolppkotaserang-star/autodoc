@@ -232,7 +232,7 @@
         <div id="form_content" style="display:none;">
           
           <div class="row-grid">
-            <div>
+            <div id="container-no-surat"> <!-- Ditambahkan ID untuk disembunyikan/dimunculkan -->
               <label>Nomor Surat:</label>
               <input type="text" name="nomor_surat" id="nomor_surat" placeholder="Contoh: 300.1.2.2/..." autocomplete="off">
             </div>
@@ -295,7 +295,7 @@
           </div>
 
           <!-- Section Pejabat Penandatangan -->
-          <div class="section-card">
+          <div id="section_mengetahui" class="section-card" style="display:none;">
             <h4>✍️ Pejabat Penandatangan / Mengetahui</h4>
             <label>Cari Pejabat:</label>
             <div class="autocomplete-container">
@@ -477,14 +477,38 @@
             document.getElementById('form_content').style.display = 'block';
 
             let namaSuratUpper = t[0].toUpperCase();
-            let pakaiBarang = namaSuratUpper.includes('BAST') || namaSuratUpper.includes('SERAH');
-            let pakaiSPT = namaSuratUpper.includes('TUGAS') || namaSuratUpper.includes('SPT');
-            let pakaiPihak = namaSuratUpper.includes('BAST');
+            
+            // 1. Reset semua bagian form (Sembunyikan)
+            document.getElementById('container-no-surat').style.display = 'none';
+            document.getElementById('section_tanggal_dikeluarkan').style.display = 'none';
+            document.getElementById('section_barang').style.display = 'none';
+            document.getElementById('section_spt').style.display = 'none';
+            document.getElementById('section_pihak').style.display = 'none';
+            document.getElementById('section_mengetahui').style.display = 'none';
 
-            document.getElementById('section_barang').style.display = pakaiBarang ? 'block' : 'none';
-            document.getElementById('section_spt').style.display = pakaiSPT ? 'block' : 'none';
-            document.getElementById('section_pihak').style.display = pakaiPihak ? 'block' : 'none';
-            document.getElementById('section_tanggal_dikeluarkan').style.display = pakaiSPT ? 'block' : 'none';
+            // 2. Tampilkan bagian form sesuai jenis template
+            if (namaSuratUpper.includes('BAST') || namaSuratUpper.includes('SERAH')) {
+                document.getElementById('container-no-surat').style.display = 'block';
+                document.getElementById('section_barang').style.display = 'block';
+                document.getElementById('section_pihak').style.display = 'block';
+                document.getElementById('section_mengetahui').style.display = 'block';
+            } 
+            else if (namaSuratUpper.includes('JADWAL')) {
+                document.getElementById('section_tanggal_dikeluarkan').style.display = 'block'; 
+                document.getElementById('section_spt').style.display = 'block';
+                document.getElementById('section_mengetahui').style.display = 'block';
+            } 
+            else if (namaSuratUpper.includes('LAMPIRAN')) {
+                document.getElementById('container-no-surat').style.display = 'block';
+                document.getElementById('section_tanggal_dikeluarkan').style.display = 'block';
+                document.getElementById('section_spt').style.display = 'block';
+            } 
+            else if (namaSuratUpper.includes('TUGAS') || namaSuratUpper.includes('SPT')) {
+                document.getElementById('container-no-surat').style.display = 'block';
+                document.getElementById('section_tanggal_dikeluarkan').style.display = 'block';
+                document.getElementById('section_spt').style.display = 'block';
+                document.getElementById('section_mengetahui').style.display = 'block';
+            }
 
             list.innerHTML = '';
           };
@@ -536,31 +560,6 @@
               document.getElementById('pangkat_mengetahui').value = p[2] || '';
               document.getElementById('nip_mengetahui').value = p[1] || '';
             }
-            list.innerHTML = '';
-          };
-          list.appendChild(div);
-        });
-      }
-
-      function filterAset(val, index) {
-        let list = document.getElementById('list_aset_' + index);
-        list.innerHTML = '';
-        if (!val) return;
-        
-        let matches = window.dataAset.filter(a => 
-          (a[0] && a[0].toLowerCase().includes(val.toLowerCase())) || 
-          (a[1] && a[1].toLowerCase().includes(val.toLowerCase()))
-        );
-
-        matches.forEach(a => {
-          let div = document.createElement('div');
-          div.innerHTML = `<b>${a[0]}</b> - ${a[1]}`;
-          div.onclick = function() {
-            document.getElementById('cari_aset_' + index).value = a[0];
-            document.getElementById('nama_barang_' + index).value = a[0] || '';
-            document.getElementById('merk_type_' + index).value = a[1] || '';
-            document.getElementById('no_seri_' + index).value = [a[2], a[3], a[4]].filter(Boolean).join(' | ');
-            document.getElementById('tahun_perolehan_' + index).value = a[5] || '';
             list.innerHTML = '';
           };
           list.appendChild(div);
