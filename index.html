@@ -232,11 +232,11 @@
         <div id="form_content" style="display:none;">
           
           <div class="row-grid">
-            <div id="container-no-surat"> <!-- Ditambahkan ID untuk disembunyikan/dimunculkan -->
+            <div id="container-no-surat"> 
               <label>Nomor Surat:</label>
               <input type="text" name="nomor_surat" id="nomor_surat" placeholder="Contoh: 300.1.2.2/..." autocomplete="off">
             </div>
-            <div>
+            <div id="container-hari-tanggal"> <!-- Ditambahkan ID ini -->
               <label>Tanggal Penugasan / Kegiatan:</label>
               <input type="text" name="hari_tanggal" id="hari_tanggal" placeholder="Contoh: 01 s/d 31 Agustus 2026" autocomplete="off">
             </div>
@@ -480,6 +480,7 @@
             
             // 1. Reset semua bagian form (Sembunyikan)
             document.getElementById('container-no-surat').style.display = 'none';
+            document.getElementById('container-hari-tanggal').style.display = 'none'; // Reset Tanggal Penugasan
             document.getElementById('section_tanggal_dikeluarkan').style.display = 'none';
             document.getElementById('section_barang').style.display = 'none';
             document.getElementById('section_spt').style.display = 'none';
@@ -489,22 +490,26 @@
             // 2. Tampilkan bagian form sesuai jenis template
             if (namaSuratUpper.includes('BAST') || namaSuratUpper.includes('SERAH')) {
                 document.getElementById('container-no-surat').style.display = 'block';
+                document.getElementById('container-hari-tanggal').style.display = 'block';
                 document.getElementById('section_barang').style.display = 'block';
                 document.getElementById('section_pihak').style.display = 'block';
                 document.getElementById('section_mengetahui').style.display = 'block';
             } 
             else if (namaSuratUpper.includes('JADWAL')) {
+                // container-hari-tanggal tetap hidden
                 document.getElementById('section_tanggal_dikeluarkan').style.display = 'block'; 
                 document.getElementById('section_spt').style.display = 'block';
                 document.getElementById('section_mengetahui').style.display = 'block';
             } 
             else if (namaSuratUpper.includes('LAMPIRAN')) {
                 document.getElementById('container-no-surat').style.display = 'block';
+                // container-hari-tanggal tetap hidden
                 document.getElementById('section_tanggal_dikeluarkan').style.display = 'block';
                 document.getElementById('section_spt').style.display = 'block';
             } 
             else if (namaSuratUpper.includes('TUGAS') || namaSuratUpper.includes('SPT')) {
                 document.getElementById('container-no-surat').style.display = 'block';
+                document.getElementById('container-hari-tanggal').style.display = 'block';
                 document.getElementById('section_tanggal_dikeluarkan').style.display = 'block';
                 document.getElementById('section_spt').style.display = 'block';
                 document.getElementById('section_mengetahui').style.display = 'block';
