@@ -3,17 +3,17 @@
   <head>
     <base target="_top">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Otomasi Dokumen Satpol PP</title>
+    <title>SI-ASEP | Satpol PP Kota Serang</title>
     <style>
       :root {
-        --primary: #2563eb;
-        --primary-hover: #1d4ed8;
-        --bg-color: #f1f5f9;
+        --praja-blue: #0f172a; /* Biru Gelap Satpol PP */
+        --praja-gold: #d97706; /* Emas Satpol PP */
+        --praja-gold-hover: #b45309;
+        --bg-color: #f8fafc;
         --card-bg: #ffffff;
         --text-color: #1e293b;
-        --text-muted: #64748b;
         --border-color: #cbd5e1;
-        --radius: 10px;
+        --radius: 12px;
       }
 
       body { 
@@ -28,59 +28,73 @@
         max-width: 800px; 
         margin: 20px auto; 
         background: var(--card-bg); 
-        padding: 35px; 
+        padding: 40px; 
         border-radius: var(--radius); 
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05); 
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
       }
 
-      .header-title {
+      .header-section {
         display: flex;
         align-items: center;
-        gap: 12px;
-        border-bottom: 2px solid #f1f5f9;
-        padding-bottom: 15px;
-        margin-bottom: 25px;
+        gap: 15px;
+        border-bottom: 3px solid var(--praja-gold);
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+      }
+
+      /* Lingkaran inisial logo (Bisa diganti image logo asli nantinya) */
+      .logo-circle {
+        background-color: var(--praja-blue);
+        color: var(--praja-gold);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 900;
+        font-size: 24px;
+        letter-spacing: 1px;
       }
 
       .header-title h3 {
-        margin: 0;
-        color: #0f172a;
-        font-size: 20px;
-        font-weight: 700;
+        margin: 0 0 5px 0;
+        color: var(--praja-blue);
+        font-size: 24px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
       .header-title span {
-        font-size: 13px;
-        background: #e0f2fe;
-        color: #0369a1;
-        padding: 4px 10px;
-        border-radius: 20px;
+        font-size: 14px;
+        color: #475569;
         font-weight: 600;
       }
 
       h4 { 
-        color: #334155; 
-        font-size: 15px; 
-        margin: 25px 0 12px 0; 
+        color: var(--praja-blue); 
+        font-size: 16px; 
+        margin: 25px 0 15px 0; 
         display: flex;
         align-items: center;
         gap: 8px;
-        border-bottom: 1px dashed #e2e8f0;
-        padding-bottom: 8px;
+        border-bottom: 2px dashed #e2e8f0;
+        padding-bottom: 10px;
       }
 
       label { 
         font-size: 13px; 
-        color: var(--text-muted); 
-        font-weight: 600; 
+        color: #334155; 
+        font-weight: 700; 
         display: block; 
-        margin-top: 14px; 
-        margin-bottom: 6px; 
+        margin-top: 15px; 
+        margin-bottom: 8px; 
       }
 
       input, select { 
         width: 100%; 
-        padding: 11px 14px; 
+        padding: 12px 15px; 
         border: 1px solid var(--border-color); 
         border-radius: 8px; 
         font-size: 14px; 
@@ -91,139 +105,104 @@
 
       input:focus, select:focus { 
         outline: none; 
-        border-color: var(--primary); 
+        border-color: var(--praja-gold); 
         background-color: #ffffff;
-        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); 
+        box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.15); 
       }
 
-      .row-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-      }
+      .row-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
       button { 
-        background: var(--primary); 
-        color: white; 
         border: none; 
-        padding: 10px 16px; 
+        padding: 12px 18px; 
         cursor: pointer; 
         font-size: 14px; 
-        font-weight: 600;
+        font-weight: 700;
         border-radius: 8px; 
-        transition: background 0.2s, transform 0.1s; 
+        transition: all 0.2s; 
       }
 
-      button:hover { 
-        background: var(--primary-hover); 
-      }
+      button:active { transform: scale(0.98); }
 
-      button:active {
-        transform: scale(0.98);
-      }
-
-      .btn-danger { 
-        background: #fee2e2; 
-        color: #dc2626;
-        padding: 8px 14px; 
-        font-size: 13px; 
-        margin-top: 10px; 
-        width: auto; 
-        border-radius: 6px;
-      }
-      .btn-danger:hover { background: #fecaca; }
-
-      .btn-success { 
-        background: #10b981; 
+      .btn-primary { 
+        background: var(--praja-blue); 
+        color: white; 
         width: 100%; 
-        padding: 14px;
-        font-size: 15px; 
-        margin-top: 30px; 
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        padding: 16px;
+        font-size: 16px; 
+        margin-top: 35px; 
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
       }
-      .btn-success:hover { background: #059669; }
+      .btn-primary:hover { background: #1e293b; }
 
       .btn-info {
-        background: #f1f5f9;
-        color: #475569;
-        border: 1px solid #cbd5e1;
-        font-size: 13px;
-        padding: 8px 14px;
-        margin-top: 10px;
+        background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 10px 15px; margin-top: 12px;
       }
       .btn-info:hover { background: #e2e8f0; color: #1e293b; }
 
-      .autocomplete-container { 
-        position: relative; 
-      }
+      .btn-danger { background: #fee2e2; color: #dc2626; padding: 8px 14px; margin-top: 10px; border-radius: 6px; }
+      .btn-danger:hover { background: #fecaca; }
 
+      .btn-wa {
+        background: #128C7E; color: white; width: 100%; padding: 15px; font-size: 15px; margin-top: 15px;
+      }
+      .btn-wa:hover { background: #075E54; }
+
+      .btn-download {
+        background: var(--praja-gold); color: white; width: 100%; padding: 15px; font-size: 15px; margin-top: 20px;
+      }
+      .btn-download:hover { background: var(--praja-gold-hover); }
+
+      .autocomplete-container { position: relative; }
       .suggestions-list { 
-        position: absolute; 
-        border: 1px solid var(--border-color); 
-        z-index: 99; 
-        top: 100%; 
-        left: 0; 
-        right: 0; 
-        max-height: 200px; 
-        overflow-y: auto; 
-        background-color: #fff; 
-        border-radius: 0 0 8px 8px;
+        position: absolute; border: 1px solid var(--border-color); z-index: 99; top: 100%; left: 0; right: 0; 
+        max-height: 200px; overflow-y: auto; background-color: #fff; border-radius: 0 0 8px 8px;
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
       }
+      .suggestions-list div { padding: 12px 15px; cursor: pointer; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+      .suggestions-list div:hover { background-color: #f8fafc; color: var(--praja-gold); font-weight: 600; }
 
-      .suggestions-list div { 
-        padding: 11px 14px; 
-        cursor: pointer; 
-        border-bottom: 1px solid #f1f5f9; 
-        font-size: 13px; 
-      }
+      .loading-box { text-align: center; color: var(--praja-blue); margin: 50px 0; font-weight: 700; font-size: 16px; }
+      .item-row { background: #f8fafc; padding: 25px; border: 1px solid #e2e8f0; margin-bottom: 15px; border-radius: 8px; }
+      .section-card { background: #ffffff; border: 1px solid #e2e8f0; padding: 25px; border-radius: 8px; margin-top: 25px; }
 
-      .suggestions-list div:hover { 
-        background-color: #f8fafc; 
-        color: var(--primary);
-        font-weight: 500;
-      }
-
-      .loading-box { 
-        text-align: center;
-        color: var(--primary); 
-        margin: 50px 0; 
-        font-weight: 600; 
-        font-size: 15px;
-      }
-
-      .item-row { 
-        background: #f8fafc; 
-        padding: 20px; 
-        border: 1px solid #e2e8f0; 
-        margin-bottom: 15px; 
-        border-radius: 8px; 
-      }
-
-      .section-card {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        padding: 20px;
-        border-radius: 8px;
-        margin-top: 20px;
-      }
+      /* Styling untuk Layar Sukses */
+      .success-screen { text-align: center; display: none; padding: 20px; }
+      .success-icon { font-size: 60px; margin-bottom: 15px; }
+      .success-screen h2 { color: var(--praja-blue); margin-bottom: 10px; }
+      .success-screen p { color: #475569; margin-bottom: 30px; font-size: 15px; }
     </style>
   </head>
   <body>
     
     <div class="container">
-      <div class="header-title">
-        <h3>Otomasi Dokumen Surat</h3>
-        <span>Satpol PP Kota Serang</span>
+      <div class="header-section">
+        <div class="logo-circle">PP</div>
+        <div class="header-title">
+          <h3>Sistem SI-ASEP</h3>
+          <span>Satuan Polisi Pamong Praja Kota Serang</span>
+        </div>
       </div>
       
-      <div id="loadingStatus" class="loading-box">⏳ Memuat database sistem, mohon tunggu sebentar...</div>
+      <div id="loadingStatus" class="loading-box">⏳ Menghubungkan ke Database Master...</div>
+
+      <!-- LAYAR SUKSES & TOMBOL WA -->
+      <div id="success-screen" class="success-screen">
+        <div class="success-icon">🎉</div>
+        <h2>Dokumen Berhasil Dibuat!</h2>
+        <p>Arsip sudah otomatis tercatat di Buku Agenda. Silakan unduh atau bagikan dokumen ini kepada personel yang bertugas.</p>
+        <button id="btn-download" class="btn-download">⬇️ Download Dokumen Sekarang</button>
+        <button id="btn-wa" class="btn-wa">💬 Bagikan via WhatsApp</button>
+        <button onclick="location.reload()" class="btn-info" style="width:100%; margin-top:15px;">Buat Dokumen Baru</button>
+      </div>
 
       <form id="docForm" onsubmit="handleFormSubmit(event)" style="display:none;">
         
         <label>Pilih Jenis Template Surat:</label>
         <div class="autocomplete-container">
-          <input type="text" id="cari_template" placeholder="🔍 Ketik nama template (BAST / SPT)..." autocomplete="off" oninput="filterTemplate(this.value)">
+          <input type="text" id="cari_template" placeholder="🔍 Ketik nama template (contoh: BAST / SPT)..." autocomplete="off" oninput="filterTemplate(this.value)">
           <div id="list_template" class="suggestions-list"></div>
         </div>
         <input type="hidden" id="template_id" name="template_id">
@@ -247,71 +226,65 @@
             <input type="text" name="tanggal_dikeluarkan" id="tanggal_dikeluarkan" placeholder="Contoh: 31 Juli 2026" autocomplete="off">
           </div>
           
-          <!-- Section Khusus BAST (Tabel Barang) -->
           <div id="section_barang" class="section-card" style="display:none;">
-            <h4>📦 Daftar Barang / Aset Diserahterimakan</h4>
+            <h4>📦 Daftar Barang / Aset</h4>
             <div id="container-aset"></div>
-            <button type="button" class="btn-info" onclick="tambahBarisAset()">+ Tambah Baris Barang</button>
+            <button type="button" class="btn-info" onclick="tambahBarisAset()">+ Tambah Barang</button>
           </div>
 
-          <!-- Section Khusus SPT (Pengaturan Personel: Ganti atau Hapus) -->
           <div id="section_spt" class="section-card" style="display:none;">
             <h4>👥 Pengaturan Personel (Ganti / Hapus)</h4>
             <div id="container-modify"></div>
             <button type="button" class="btn-info" onclick="tambahBarisModify()">+ Tambah Aksi Personel</button>
           </div>
 
-          <!-- Section Pihak 1 & Pihak 2 -->
           <div id="section_pihak" class="section-card" style="display:none;">
             <h4>🤝 Pihak - Pihak Terkait</h4>
-            
-            <label>Cari Pihak 1 (Yang Menyerahkan):</label>
+            <label>Pihak 1 (Yang Menyerahkan):</label>
             <div class="autocomplete-container">
-              <input type="text" id="cari_p1" placeholder="🔍 Ketik nama Pihak 1..." autocomplete="off" oninput="filterPegawai(this.value, 'p1')">
+              <input type="text" id="cari_p1" placeholder="🔍 Cari Pihak 1..." autocomplete="off" oninput="filterPegawai(this.value, 'p1')">
               <div id="list_p1" class="suggestions-list"></div>
             </div>
             <div class="row-grid" style="margin-top: 8px;">
-              <input type="text" name="nama_p1" id="nama_p1" placeholder="Nama Pihak 1">
-              <input type="text" name="pangkat_p1" id="pangkat_p1" placeholder="Pangkat Pihak 1">
+              <input type="text" name="nama_p1" id="nama_p1" placeholder="Nama">
+              <input type="text" name="pangkat_p1" id="pangkat_p1" placeholder="Pangkat">
             </div>
             <div class="row-grid" style="margin-top: 8px;">
-              <input type="text" name="nip_p1" id="nip_p1" placeholder="NIP Pihak 1">
-              <input type="text" name="jabatan_p1" id="jabatan_p1" placeholder="Jabatan Pihak 1">
+              <input type="text" name="nip_p1" id="nip_p1" placeholder="NIP">
+              <input type="text" name="jabatan_p1" id="jabatan_p1" placeholder="Jabatan">
             </div>
 
-            <label style="margin-top: 15px;">Cari Pihak 2 (Yang Menerima):</label>
+            <label style="margin-top: 20px;">Pihak 2 (Yang Menerima):</label>
             <div class="autocomplete-container">
-              <input type="text" id="cari_p2" placeholder="🔍 Ketik nama Pihak 2..." autocomplete="off" oninput="filterPegawai(this.value, 'p2')">
+              <input type="text" id="cari_p2" placeholder="🔍 Cari Pihak 2..." autocomplete="off" oninput="filterPegawai(this.value, 'p2')">
               <div id="list_p2" class="suggestions-list"></div>
             </div>
             <div class="row-grid" style="margin-top: 8px;">
-              <input type="text" name="nama_p2" id="nama_p2" placeholder="Nama Pihak 2">
-              <input type="text" name="pangkat_p2" id="pangkat_p2" placeholder="Pangkat Pihak 2">
+              <input type="text" name="nama_p2" id="nama_p2" placeholder="Nama">
+              <input type="text" name="pangkat_p2" id="pangkat_p2" placeholder="Pangkat">
             </div>
             <div class="row-grid" style="margin-top: 8px;">
-              <input type="text" name="nip_p2" id="nip_p2" placeholder="NIP Pihak 2">
-              <input type="text" name="jabatan_p2" id="jabatan_p2" placeholder="Jabatan Pihak 2">
+              <input type="text" name="nip_p2" id="nip_p2" placeholder="NIP">
+              <input type="text" name="jabatan_p2" id="jabatan_p2" placeholder="Jabatan">
             </div>
           </div>
 
-          <!-- Section Pejabat Penandatangan -->
           <div id="section_mengetahui" class="section-card" style="display:none;">
             <h4>✍️ Pejabat Penandatangan / Mengetahui</h4>
             <label>Cari Pejabat:</label>
             <div class="autocomplete-container">
-              <input type="text" id="cari_mengetahui" placeholder="🔍 Ketik nama pejabat..." autocomplete="off" oninput="filterPegawai(this.value, 'mengetahui')">
+              <input type="text" id="cari_mengetahui" placeholder="🔍 Cari Pejabat..." autocomplete="off" oninput="filterPegawai(this.value, 'mengetahui')">
               <div id="list_mengetahui" class="suggestions-list"></div>
             </div>
             <div class="row-grid" style="margin-top: 8px;">
-              <input type="text" name="nama_mengetahui" id="nama_mengetahui" placeholder="Nama Pejabat">
-              <input type="text" name="pangkat_mengetahui" id="pangkat_mengetahui" placeholder="Pangkat / Golongan">
+              <input type="text" name="nama_mengetahui" id="nama_mengetahui" placeholder="Nama">
+              <input type="text" name="pangkat_mengetahui" id="pangkat_mengetahui" placeholder="Pangkat">
             </div>
-            <input type="text" name="nip_mengetahui" id="nip_mengetahui" placeholder="NIP Pejabat" style="margin-top: 8px;">
+            <input type="text" name="nip_mengetahui" id="nip_mengetahui" placeholder="NIP" style="margin-top: 8px;">
           </div>
           
-          <button type="submit" class="btn-success">🚀 Buat Dokumen Surat Sekarang</button>
+          <button type="submit" id="btn-submit" class="btn-primary">🚀 Buat Dokumen Sekarang</button>
         </div>
-
       </form>
     </div>
 
@@ -329,10 +302,8 @@
               window.dataAset = res.aset;
               window.dataTemplates = res.templates; 
               window.dataMasterPersonel = res.master_personel || [];
-
               document.getElementById('loadingStatus').style.display = 'none';
               document.getElementById('docForm').style.display = 'block';
-              
               tambahBarisAset();
               tambahBarisModify();
             }
@@ -364,15 +335,10 @@
             document.getElementById('cari_template').value = t[0];
             document.getElementById('jenis_surat').value = t[0];
             document.getElementById('template_id').value = t[1]; 
-            
-            if (t[2]) {
-              document.getElementById('nomor_surat').value = t[2];
-            }
-
+            if (t[2]) document.getElementById('nomor_surat').value = t[2];
             document.getElementById('form_content').style.display = 'block';
-            let namaSuratUpper = String(t[0]).toUpperCase();
             
-            // Ambil elemen Label dan Input untuk Hari/Tanggal
+            let namaSuratUpper = String(t[0]).toUpperCase();
             let labelHariTanggal = document.getElementById('label_hari_tanggal'); 
             let inputHariTanggal = document.getElementById('hari_tanggal');
             
@@ -386,26 +352,23 @@
 
             if (namaSuratUpper.includes('BAST') || namaSuratUpper.includes('SERAH')) {
                 labelHariTanggal.innerText = 'Tanggal Serah Terima:'; 
-                inputHariTanggal.placeholder = 'Contoh: Senin Tiga Januari Tahun...'; // Ubah placeholder BAST
+                inputHariTanggal.placeholder = 'Contoh: Senin, 03 Agustus 2026';
                 document.getElementById('container-no-surat').style.display = 'block';
                 document.getElementById('container-hari-tanggal').style.display = 'block';
                 document.getElementById('section_barang').style.display = 'block';
                 document.getElementById('section_pihak').style.display = 'block';
                 document.getElementById('section_mengetahui').style.display = 'block';
-            } 
-            else if (namaSuratUpper.includes('JADWAL')) {
+            } else if (namaSuratUpper.includes('JADWAL')) {
                 document.getElementById('section_tanggal_dikeluarkan').style.display = 'block'; 
                 document.getElementById('section_spt').style.display = 'block';
                 document.getElementById('section_mengetahui').style.display = 'block';
-            } 
-            else if (namaSuratUpper.includes('LAMPIRAN')) {
+            } else if (namaSuratUpper.includes('LAMPIRAN')) {
                 document.getElementById('container-no-surat').style.display = 'block';
                 document.getElementById('section_tanggal_dikeluarkan').style.display = 'block';
                 document.getElementById('section_spt').style.display = 'block';
-            } 
-            else if (namaSuratUpper.includes('TUGAS') || namaSuratUpper.includes('SPT')) {
+            } else if (namaSuratUpper.includes('TUGAS') || namaSuratUpper.includes('SPT')) {
                 labelHariTanggal.innerText = 'Tanggal Penugasan / Kegiatan:'; 
-                inputHariTanggal.placeholder = 'Contoh: 01 s/d 31 Agustus 2026'; // Kembali ke placeholder SPT
+                inputHariTanggal.placeholder = 'Contoh: 01 s/d 31 Agustus 2026';
                 document.getElementById('container-no-surat').style.display = 'block';
                 document.getElementById('container-hari-tanggal').style.display = 'block';
                 document.getElementById('section_tanggal_dikeluarkan').style.display = 'block';
@@ -446,22 +409,12 @@
         `;
         container.appendChild(div);
       }
-
-      function hapusBarisAset(id) {
-        let row = document.getElementById('row_aset_' + id);
-        if(row) row.remove();
-      }
-
+      function hapusBarisAset(id) { document.getElementById('row_aset_' + id).remove(); }
       function filterAset(val, index) {
         let list = document.getElementById('list_aset_' + index);
         list.innerHTML = '';
         if (!val) return;
-        
-        let matches = window.dataAset.filter(a => 
-          (a[0] != null && String(a[0]).toLowerCase().includes(val.toLowerCase())) || 
-          (a[1] != null && String(a[1]).toLowerCase().includes(val.toLowerCase()))
-        );
-
+        let matches = window.dataAset.filter(a => (a[0] != null && String(a[0]).toLowerCase().includes(val.toLowerCase())) || (a[1] != null && String(a[1]).toLowerCase().includes(val.toLowerCase())));
         matches.forEach(a => {
           let div = document.createElement('div');
           div.innerHTML = `<b>${a[0]}</b> - ${a[1]}`;
@@ -493,52 +446,38 @@
               </select>
             </div>
             <div>
-              <label>Cari Personel Asli yang Disasar:</label>
+              <label>Personel Target (Nama Asli):</label>
               <div class="autocomplete-container">
-                <input type="text" id="cari_target_${modifyIndex}" placeholder="🔍 Ketik nama asli..." autocomplete="off" oninput="filterTargetModify(this.value, ${modifyIndex})">
+                <input type="text" id="cari_target_${modifyIndex}" placeholder="🔍 Cari nama..." autocomplete="off" oninput="filterTargetModify(this.value, ${modifyIndex})">
                 <div id="list_target_${modifyIndex}" class="suggestions-list"></div>
               </div>
               <input type="hidden" id="target_nama_${modifyIndex}">
             </div>
           </div>
-
           <div id="wrap_pengganti_${modifyIndex}" style="margin-top: 10px;">
-            <label>Cari Anggota Pengganti:</label>
+            <label>Pengganti (Jika Diganti):</label>
             <div class="autocomplete-container">
-              <input type="text" id="cari_mod_${modifyIndex}" placeholder="🔍 Ketik nama anggota pengganti..." autocomplete="off" oninput="filterMasterModify(this.value, ${modifyIndex})">
+              <input type="text" id="cari_mod_${modifyIndex}" placeholder="🔍 Cari pengganti..." autocomplete="off" oninput="filterMasterModify(this.value, ${modifyIndex})">
               <div id="list_mod_${modifyIndex}" class="suggestions-list"></div>
             </div>
             <div class="row-grid" style="margin-top: 8px;">
-              <input type="text" id="mod_nama_${modifyIndex}" placeholder="Nama Lengkap Baru">
-              <input type="text" id="mod_pangkat_${modifyIndex}" placeholder="Pangkat / Jabatan Baru">
+              <input type="text" id="mod_nama_${modifyIndex}" placeholder="Nama Baru">
+              <input type="text" id="mod_pangkat_${modifyIndex}" placeholder="Pangkat Baru">
             </div>
           </div>
-
           ${modifyIndex > 1 ? '<button type="button" class="btn-danger" onclick="hapusBarisModify(' + modifyIndex + ')">Hapus Aksi Ini</button>' : ''}
         `;
         container.appendChild(div);
       }
 
-      function toggleAksiField(id) {
-        let aksi = document.getElementById('aksi_' + id).value;
-        let wrap = document.getElementById('wrap_pengganti_' + id);
-        wrap.style.display = (aksi === 'hapus') ? 'none' : 'block';
-      }
-
-      function hapusBarisModify(id) {
-        let row = document.getElementById('row_mod_' + id);
-        if(row) row.remove();
-      }
-
+      function toggleAksiField(id) { document.getElementById('wrap_pengganti_' + id).style.display = (document.getElementById('aksi_' + id).value === 'hapus') ? 'none' : 'block'; }
+      function hapusBarisModify(id) { document.getElementById('row_mod_' + id).remove(); }
+      
       function filterTargetModify(val, index) {
-        let list = document.getElementById('list_target_' + index);
-        list.innerHTML = '';
-        if (!val) return;
-        
+        let list = document.getElementById('list_target_' + index); list.innerHTML = ''; if (!val) return;
         let matches = window.dataMasterPersonel.filter(p => p[0] != null && String(p[0]).toLowerCase().includes(val.toLowerCase()));
         matches.forEach(p => {
-          let div = document.createElement('div');
-          div.innerHTML = `<b>${p[0]}</b> - ${p[1]}`;
+          let div = document.createElement('div'); div.innerHTML = `<b>${p[0]}</b>`;
           div.onclick = function() {
             document.getElementById('cari_target_' + index).value = p[0];
             document.getElementById('target_nama_' + index).value = p[0];
@@ -547,16 +486,11 @@
           list.appendChild(div);
         });
       }
-
       function filterMasterModify(val, index) {
-        let list = document.getElementById('list_mod_' + index);
-        list.innerHTML = '';
-        if (!val) return;
-        
+        let list = document.getElementById('list_mod_' + index); list.innerHTML = ''; if (!val) return;
         let matches = window.dataMasterPersonel.filter(p => p[0] != null && String(p[0]).toLowerCase().includes(val.toLowerCase()));
         matches.forEach(p => {
-          let div = document.createElement('div');
-          div.innerHTML = `<b>${p[0]}</b> - ${p[1]}`;
+          let div = document.createElement('div'); div.innerHTML = `<b>${p[0]}</b> - ${p[1]}`;
           div.onclick = function() {
             document.getElementById('cari_mod_' + index).value = p[0];
             document.getElementById('mod_nama_' + index).value = p[0] || '';
@@ -566,35 +500,17 @@
           list.appendChild(div);
         });
       }
-
       function filterPegawai(val, target) {
-        let list = document.getElementById('list_' + target);
-        list.innerHTML = '';
-        if (!val) return;
-        let matches = window.dataPegawai.filter(p => 
-          (p[0] != null && String(p[0]).toLowerCase().includes(val.toLowerCase())) || 
-          (p[1] != null && String(p[1]).toLowerCase().includes(val.toLowerCase()))
-        );
+        let list = document.getElementById('list_' + target); list.innerHTML = ''; if (!val) return;
+        let matches = window.dataPegawai.filter(p => (p[0] != null && String(p[0]).toLowerCase().includes(val.toLowerCase())) || (p[1] != null && String(p[1]).toLowerCase().includes(val.toLowerCase())));
         matches.forEach(p => {
-          let div = document.createElement('div');
-          div.innerHTML = `<b>${p[0]}</b> (${p[1]})`;
+          let div = document.createElement('div'); div.innerHTML = `<b>${p[0]}</b>`;
           div.onclick = function() {
             document.getElementById('cari_' + target).value = p[0];
-            if(target === 'p1') {
-              document.getElementById('nama_p1').value = p[0] || '';
-              document.getElementById('nip_p1').value = p[1] || '';
-              document.getElementById('pangkat_p1').value = p[2] || '';
-              document.getElementById('jabatan_p1').value = p[3] || '';
-            } else if(target === 'p2') {
-              document.getElementById('nama_p2').value = p[0] || '';
-              document.getElementById('nip_p2').value = p[1] || '';
-              document.getElementById('pangkat_p2').value = p[2] || '';
-              document.getElementById('jabatan_p2').value = p[3] || '';
-            } else if(target === 'mengetahui') {
-              document.getElementById('nama_mengetahui').value = p[0] || '';
-              document.getElementById('pangkat_mengetahui').value = p[2] || '';
-              document.getElementById('nip_mengetahui').value = p[1] || '';
-            }
+            document.getElementById('nama_' + target).value = p[0] || '';
+            document.getElementById('nip_' + target).value = p[1] || '';
+            document.getElementById('pangkat_' + target).value = p[2] || '';
+            if(target !== 'mengetahui') document.getElementById('jabatan_' + target).value = p[3] || '';
             list.innerHTML = '';
           };
           list.appendChild(div);
@@ -604,79 +520,72 @@
       async function handleFormSubmit(event) {
         event.preventDefault();
         
-        if(!document.getElementById('template_id').value) {
-          alert('Silakan pilih Template Surat terlebih dahulu dari autocomplete!');
-          return;
-        }
+        let templateTitle = document.getElementById('template_id').value;
+        if(!templateTitle) return alert('Silakan pilih Template Surat!');
 
-        alert('Sedang memproses dokumen, mohon tunggu...');
+        let btn = document.getElementById('btn-submit');
+        btn.innerText = '⚙️ Sedang Memproses Dokumen...';
+        btn.disabled = true;
         
         const data = {
-          template_id: document.getElementById('template_id').value,
-          jenis_surat: document.getElementById('jenis_surat').value,
-          nomor_surat: document.getElementById('nomor_surat').value,
-          hari_tanggal: document.getElementById('hari_tanggal').value,
+          template_id: templateTitle, jenis_surat: document.getElementById('jenis_surat').value,
+          nomor_surat: document.getElementById('nomor_surat').value, hari_tanggal: document.getElementById('hari_tanggal').value,
           tanggal_dikeluarkan: document.getElementById('tanggal_dikeluarkan').value,
-          nama_p1: document.getElementById('nama_p1').value,
-          pangkat_p1: document.getElementById('pangkat_p1').value,
-          nip_p1: document.getElementById('nip_p1').value,
-          jabatan_p1: document.getElementById('jabatan_p1').value,
-          nama_p2: document.getElementById('nama_p2').value,
-          pangkat_p2: document.getElementById('pangkat_p2').value,
-          nip_p2: document.getElementById('nip_p2').value,
-          jabatan_p2: document.getElementById('jabatan_p2').value,
-          nama_mengetahui: document.getElementById('nama_mengetahui').value,
-          pangkat_mengetahui: document.getElementById('pangkat_mengetahui').value,
-          nip_mengetahui: document.getElementById('nip_mengetahui').value,
-          items: [],
-          personel_items: []
+          nama_p1: document.getElementById('nama_p1').value, pangkat_p1: document.getElementById('pangkat_p1').value, nip_p1: document.getElementById('nip_p1').value, jabatan_p1: document.getElementById('jabatan_p1').value,
+          nama_p2: document.getElementById('nama_p2').value, pangkat_p2: document.getElementById('pangkat_p2').value, nip_p2: document.getElementById('nip_p2').value, jabatan_p2: document.getElementById('jabatan_p2').value,
+          nama_mengetahui: document.getElementById('nama_mengetahui').value, pangkat_mengetahui: document.getElementById('pangkat_mengetahui').value, nip_mengetahui: document.getElementById('nip_mengetahui').value,
+          items: [], personel_items: []
         };
 
-        let sectionBarang = document.getElementById('section_barang');
-        if (sectionBarang.style.display !== 'none') {
-          let rows = document.querySelectorAll('#container-aset .item-row');
-          rows.forEach(row => {
-            let idMatch = row.id.split('_')[2];
+        if (document.getElementById('section_barang').style.display !== 'none') {
+          document.querySelectorAll('#container-aset .item-row').forEach(row => {
+            let id = row.id.split('_')[2];
             data.items.push({
-              nama_barang: document.getElementById('nama_barang_' + idMatch).value,
-              merk_type: document.getElementById('merk_type_' + idMatch).value,
-              no_seri: document.getElementById('no_seri_' + idMatch).value,
-              tahun_perolehan: document.getElementById('tahun_perolehan_' + idMatch).value,
-              jumlah: document.getElementById('jumlah_' + idMatch).value,
-              keterangan: document.getElementById('keterangan_' + idMatch).value
+              nama_barang: document.getElementById('nama_barang_' + id).value, merk_type: document.getElementById('merk_type_' + id).value,
+              no_seri: document.getElementById('no_seri_' + id).value, tahun_perolehan: document.getElementById('tahun_perolehan_' + id).value,
+              jumlah: document.getElementById('jumlah_' + id).value, keterangan: document.getElementById('keterangan_' + id).value
             });
           });
         }
 
-        let sectionSpt = document.getElementById('section_spt');
-        if (sectionSpt.style.display !== 'none') {
-          let rowsMod = document.querySelectorAll('#container-modify .item-row');
-          rowsMod.forEach(row => {
-            let idMatch = row.id.split('_')[2];
+        if (document.getElementById('section_spt').style.display !== 'none') {
+          document.querySelectorAll('#container-modify .item-row').forEach(row => {
+            let id = row.id.split('_')[2];
             data.personel_items.push({
-              aksi: document.getElementById('aksi_' + idMatch).value,
-              target_nama: document.getElementById('target_nama_' + idMatch).value,
-              nama: document.getElementById('mod_nama_' + idMatch).value,
-              pangkat: document.getElementById('mod_pangkat_' + idMatch).value
+              aksi: document.getElementById('aksi_' + id).value, target_nama: document.getElementById('target_nama_' + id).value,
+              nama: document.getElementById('mod_nama_' + id).value, pangkat: document.getElementById('mod_pangkat_' + id).value
             });
           });
         }
 
         try {
-          const response = await fetch(WEB_APP_URL, {
-            method: 'POST',
-            body: JSON.stringify(data)
-          });
-          
+          const response = await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(data) });
           const result = await response.json();
           if(result.status === 'success') {
-            alert('Berhasil! Link dokumen: ' + result.url);
-            window.open(result.url, '_blank');
+            // Sembunyikan form, Tampilkan halaman sukses
+            document.getElementById('docForm').style.display = 'none';
+            document.getElementById('success-screen').style.display = 'block';
+            
+            // Konfigurasi Link Download
+            document.getElementById('btn-download').onclick = () => window.open(result.url, '_blank');
+            
+            // Konfigurasi Pesan WhatsApp
+            let jSurat = data.jenis_surat;
+            let nSurat = data.nomor_surat ? ` (Nomor: ${data.nomor_surat})` : '';
+            let teksWA = `Izin melaporkan Komandan, dokumen *${jSurat}*${nSurat} telah selesai dibuat melalui sistem SI-ASEP.\n\nMohon berkenan klik tautan berikut untuk mengunduh dokumen:\n${result.url}\n\nTerima kasih.`;
+            
+            let linkWA = `https://api.whatsapp.com/send?text=${encodeURIComponent(teksWA)}`;
+            document.getElementById('btn-wa').onclick = () => window.open(linkWA, '_blank');
+            
           } else {
             alert('Gagal: ' + result.message);
+            btn.innerText = '🚀 Buat Dokumen Sekarang';
+            btn.disabled = false;
           }
         } catch (error) {
           alert('Terjadi kesalahan koneksi: ' + error);
+          btn.innerText = '🚀 Buat Dokumen Sekarang';
+          btn.disabled = false;
         }
       }
     </script>
