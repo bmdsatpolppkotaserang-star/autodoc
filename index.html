@@ -237,7 +237,7 @@
               <input type="text" name="nomor_surat" id="nomor_surat" placeholder="Contoh: 300.1.2.2/..." autocomplete="off">
             </div>
             <div id="container-hari-tanggal"> 
-              <label>Tanggal Penugasan / Kegiatan:</label>
+              <label id="label_hari_tanggal">Tanggal Penugasan / Kegiatan:</label>
               <input type="text" name="hari_tanggal" id="hari_tanggal" placeholder="Contoh: 01 s/d 31 Agustus 2026" autocomplete="off">
             </div>
           </div>
@@ -371,6 +371,7 @@
 
             document.getElementById('form_content').style.display = 'block';
             let namaSuratUpper = String(t[0]).toUpperCase();
+            let labelHariTanggal = document.getElementById('label_hari_tanggal'); // Element Label
             
             document.getElementById('container-no-surat').style.display = 'none';
             document.getElementById('container-hari-tanggal').style.display = 'none'; 
@@ -381,6 +382,7 @@
             document.getElementById('section_mengetahui').style.display = 'none';
 
             if (namaSuratUpper.includes('BAST') || namaSuratUpper.includes('SERAH')) {
+                labelHariTanggal.innerText = 'Tanggal Serah Terima:'; // Ganti label untuk BAST
                 document.getElementById('container-no-surat').style.display = 'block';
                 document.getElementById('container-hari-tanggal').style.display = 'block';
                 document.getElementById('section_barang').style.display = 'block';
@@ -398,6 +400,7 @@
                 document.getElementById('section_spt').style.display = 'block';
             } 
             else if (namaSuratUpper.includes('TUGAS') || namaSuratUpper.includes('SPT')) {
+                labelHariTanggal.innerText = 'Tanggal Penugasan / Kegiatan:'; // Kembali normal untuk SPT
                 document.getElementById('container-no-surat').style.display = 'block';
                 document.getElementById('container-hari-tanggal').style.display = 'block';
                 document.getElementById('section_tanggal_dikeluarkan').style.display = 'block';
@@ -444,7 +447,6 @@
         if(row) row.remove();
       }
 
-      // PERBAIKAN: Menambahkan String() agar tidak error kalau ada angka di database barang
       function filterAset(val, index) {
         let list = document.getElementById('list_aset_' + index);
         list.innerHTML = '';
@@ -523,7 +525,6 @@
         if(row) row.remove();
       }
 
-      // PERBAIKAN: Menambahkan String() 
       function filterTargetModify(val, index) {
         let list = document.getElementById('list_target_' + index);
         list.innerHTML = '';
@@ -542,7 +543,6 @@
         });
       }
 
-      // PERBAIKAN: Menambahkan String()
       function filterMasterModify(val, index) {
         let list = document.getElementById('list_mod_' + index);
         list.innerHTML = '';
@@ -562,7 +562,6 @@
         });
       }
 
-      // PERBAIKAN: Menambahkan String()
       function filterPegawai(val, target) {
         let list = document.getElementById('list_' + target);
         list.innerHTML = '';
